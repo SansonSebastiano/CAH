@@ -12,7 +12,7 @@ class Lst extends StatelessWidget {
                 .map((element) => Card(
                   child: Column(
                     children: <Widget>[
-                      Image.asset('assets/unnamed.png'),
+                      //Image.asset('assets/unnamed.png'),
                       Text(element),
                     ],
                   ),
