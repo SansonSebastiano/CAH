@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "392106230543",
+    "firebase_url": "https://cards-against-humanity-fcfdc.firebaseio.com",
+    "project_id": "cards-against-humanity-fcfdc",
+    "storage_bucket": "cards-against-humanity-fcfdc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392106230543:android:cd182745a704eccb4b347a",
+        "android_client_info": {
+          "package_name": "com.example.CAH"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392106230543-lssvrvlsfqbu7vfarha1vmsllvk8qn68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt0vKXs0eF5XiyOKIbK2Ux9mJuiAwfIuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392106230543-lssvrvlsfqbu7vfarha1vmsllvk8qn68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392106230543:android:d99bc4a9dce1ae5a4b347a",
+        "android_client_info": {
+          "package_name": "com.example.cardsagainsthumanity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392106230543-n5pr0h8ggji4kv2fl0inbsdvq1gps0fp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cardsagainsthumanity",
+            "certificate_hash": "a2d84fc40548b4ea143887b86c0dbbf12147d74b"
+          }
+        },
+        {
+          "client_id": "392106230543-lssvrvlsfqbu7vfarha1vmsllvk8qn68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt0vKXs0eF5XiyOKIbK2Ux9mJuiAwfIuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392106230543-lssvrvlsfqbu7vfarha1vmsllvk8qn68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392106230543:android:a93f116c4d2a0fa84b347a",
+        "android_client_info": {
+          "package_name": "com.example.trykotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392106230543-lssvrvlsfqbu7vfarha1vmsllvk8qn68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt0vKXs0eF5XiyOKIbK2Ux9mJuiAwfIuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392106230543-lssvrvlsfqbu7vfarha1vmsllvk8qn68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

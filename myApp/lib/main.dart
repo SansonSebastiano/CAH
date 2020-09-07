@@ -15,8 +15,18 @@ class MyApp extends StatelessWidget{
         primarySwatch: Colors.deepPurple,
       ),
       home: Scaffold(
+        //backgroundColor: Colors.yellow,
         appBar: AppBar(
-          title: Text('Home'),
+          title: const Text(
+            'Home',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2.0,
+              color: Colors.yellow,
+            ),
+          ),
+          centerTitle: true,
         ),
         body: Center(
           child: LstManager(firstItem: 'Item : 0'),
@@ -25,3 +35,28 @@ class MyApp extends StatelessWidget{
     );
   }
 }
+
+//mainAxisAlignment: MainAxisAlignment.center
+//CrossAxisAlignment: CrossAxisAlignment.center
+//SizedBox(height: pixel_value [or width: pixel_value])
+
+/*
+  Divider(
+    properties
+  )
+*/
+
+/*Icon(
+    Icons.any_icon
+    color:
+    size:
+)*/
+
+/*RaisedButton.icon(
+  onPressed: () {}
+  icon: Icon(
+    Icons.any_icon
+  ),
+  label: Text('any text'),
+  color: Color.any_color,
+)*/

@@ -24,12 +24,6 @@ class _LstManagerState extends State<LstManager>{
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(LstManager oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
-
   //LIFTING THE STATE UP 
   void _addItem(String item) {
     setState(() {
@@ -42,7 +36,7 @@ class _LstManagerState extends State<LstManager>{
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-        //margin: EdgeInsets.all(150.0),
+        //padding: EdgeInsets.all(20.0),
         child: LstControl(_addItem),
       ),
       Lst(_list),
