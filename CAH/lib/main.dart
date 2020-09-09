@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,58 +23,67 @@ class Home extends StatelessWidget {
           Positioned.fill(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child:Padding(
-                padding: EdgeInsets.only(bottom: 0),
+              child: Padding(
+                padding: EdgeInsets.zero,
                 child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40.0),
+                      topRight: Radius.circular(40.0),
+                    )
+                  ),
                   height: MediaQuery.of(context).size.height*.8,
                   width: MediaQuery.of(context).size.width,
-                  child:Card(
-                    shape: RoundedRectangleBorder(
+                  //child: Card(
+                    /*shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40.0),
                         topRight: Radius.circular(40.0)
-                      )
-                    ),
+                      ),
+                    ),*/
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height*.025,
+                          height: MediaQuery.of(context).size.height*.1,
                         ),
-                        _ButtonHome(
-                          icona: Icons.person,
-                          nome: 'Join',
-                          onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnswers()));
-                          },
+                      _ButtonHome(
+                        onPressed: (){}, 
+                        label: 'Join', 
+                        icon: Icons.person
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height*.08,
                         ),
-                        _ButtonHome(
-                          icona: Icons.add,
-                          nome: 'new match',
-                          onPressed: (){
-
-                          },
+                      _ButtonHome(
+                        onPressed: (){
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnswers()));
+                        }, 
+                        label: 'New Match', 
+                        icon: Icons.add
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height*.08,
                         ),
-                        _ButtonHome(
-                          icona: Icons.format_align_center,
-                          nome: 'rules',
-                          onPressed: (){
-
-                          },
-                        ),
-                      ],
-                    )
-                  ),
-                )
-              )
-            )
+                      _ButtonHome(
+                        onPressed: (){}, 
+                        label: 'Rules', 
+                        icon: Icons.format_align_center
+                      ),
+                    ],
+                    ),
+                  //),
+                ), 
+              ),
+            ),
           ),
           Positioned.fill(
             child: Align(
               alignment: Alignment.topCenter,
               child: Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*.1),
-                child:Container(
+                child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.white,
@@ -86,13 +95,13 @@ class Home extends StatelessWidget {
                     )
                   ),
                   height: MediaQuery.of(context).size.height*.22,
-                  width: MediaQuery.of(context).size.width*.6,
+                  width: MediaQuery.of(context).size.width*.7,
                   child: Padding(
                     padding: EdgeInsets.only(
                       left: 15,
                       right: 15,
-                      bottom: 5,
-                      top: 5 
+                      top: 15,
+                      bottom: 5
                     ),
                     child: Text(
                       'Cards Against Humanity',
@@ -102,11 +111,11 @@ class Home extends StatelessWidget {
                         fontWeight: FontWeight.bold
                       ),
                       textAlign: TextAlign.center,
-                    )
-                  )
-                ),
+                    ),
+                  ),
+                )
               )
-            )
+            ),
           )
         ],
       ),
@@ -114,20 +123,19 @@ class Home extends StatelessWidget {
   }
 }
 
-class _ButtonHome extends StatelessWidget {
-
+class _ButtonHome extends StatelessWidget{
   final Function onPressed;
-  final String nome;
-  final IconData icona;
+  final String label;
+  final IconData icon;
 
-  _ButtonHome({@required this.onPressed, @required this.nome, @required this.icona});
+  _ButtonHome({@required this.onPressed, @required this.label, @required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 20,
-        right: 20
+        left: 30,
+        right: 30
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -136,37 +144,35 @@ class _ButtonHome extends StatelessWidget {
             color: Colors.white,
             width: 0.0
           ),
-          color: Colors.black
+          color:  Colors.black
         ),
         child: Container(
           margin: EdgeInsets.only(
             bottom: 6.0,
             right: 4.0,
-            top: 0.0
           ),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(6),
+              topRight: Radius.circular(4),
               bottomRight: Radius.circular(10),
-              bottomLeft: Radius.circular(6),
+              bottomLeft: Radius.circular(6)
             ),
             border: Border.all(
               color: Colors.white
             )
           ),
           child: ListTile(
-            dense: true,
             leading: Icon(
-              icona,
+              icon,
               color: Colors.black,
             ),
             trailing: Icon(
-              icona,
+              icon,
               color: Colors.transparent,
             ),
             title: Text(
-              nome.toUpperCase(),
+              label.toUpperCase(),
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 20
@@ -174,10 +180,9 @@ class _ButtonHome extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             onTap: () => onPressed(),
-          ),  
-          
-        )
-      )
+          ),
+        ),
+      ),
     );
   }
 }
