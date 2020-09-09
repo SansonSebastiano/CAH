@@ -35,13 +35,6 @@ class Home extends StatelessWidget{
                   ),
                   height: MediaQuery.of(context).size.height*.8,
                   width: MediaQuery.of(context).size.width,
-                  //child: Card(
-                    /*shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40.0),
-                        topRight: Radius.circular(40.0)
-                      ),
-                    ),*/
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -58,7 +51,7 @@ class Home extends StatelessWidget{
                         ),
                       _ButtonHome(
                         onPressed: (){
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnswers()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnswers()));
                         }, 
                         label: 'New Match', 
                         icon: Icons.add
