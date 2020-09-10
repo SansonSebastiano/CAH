@@ -26,7 +26,7 @@ class _AllAnswersState extends State<AllAnswers>{
 
   @override
   Widget build(BuildContext context) {
-    if (answersList.isEmpty) {
+    if (answersList == null) {
       return Scaffold(
         body: Center(
           child: SizedBox(
@@ -34,6 +34,8 @@ class _AllAnswersState extends State<AllAnswers>{
             width: 150,
             child: CircularProgressIndicator(
               value: null,
+              backgroundColor: Colors.black,
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
             ),
           ),
         ),

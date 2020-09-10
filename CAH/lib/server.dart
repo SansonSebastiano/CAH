@@ -16,6 +16,16 @@ class Server {
 
   DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
 
+  Future<bool> isConnected() async{
+    DataSnapshot dataSnapshot = await databaseReference.child('.info/connected').once();
+    bool amIOnline = dataSnapshot.value;
+    if (amIOnline == true) {
+        return amIOnline;
+    } else {
+      return amIOnline;
+    }
+  }
+
   Future<List<String>> getAllAnswers() async{
     DataSnapshot dataSnapshot = await databaseReference.child(cards_Path).child(answers_Path).once();
 

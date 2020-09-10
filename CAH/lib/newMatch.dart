@@ -1,21 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'package:CAH/newMatch.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return MaterialApp(
-      home: Home()
-    );
-  }
-}
-
-class Home extends StatelessWidget{
+class NewMatch extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,29 +28,8 @@ class Home extends StatelessWidget{
                         SizedBox(
                           height: MediaQuery.of(context).size.height*.1,
                         ),
-                      _ButtonHome(
-                        onPressed: (){}, 
-                        label: 'Join', 
-                        icon: Icons.person
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height*.08,
-                        ),
-                      _ButtonHome(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => NewMatch()));
-                        }, 
-                        label: 'New Match', 
-                        icon: Icons.add
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height*.08,
-                        ),
-                      _ButtonHome(
-                        onPressed: (){}, 
-                        label: 'Rules', 
-                        icon: Icons.format_align_center
-                      ),
+                     //textbox
+                        _TextBox(label: 'Match ID'),
                     ],
                     ),
                   //),
@@ -103,11 +67,11 @@ class Home extends StatelessWidget{
                     padding: EdgeInsets.only(
                       left: 15,
                       right: 15,
-                      top: 15,
-                      bottom: 5
+                      top: MediaQuery.of(context).size.width*.15,
+                      bottom: 10
                     ),
                     child: Text(
-                      'Cards Against Humanity',
+                      'New Match',
                       style: TextStyle(
                         fontSize: 40,
                         color: Colors.white,
@@ -121,6 +85,86 @@ class Home extends StatelessWidget{
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _TextBox extends StatelessWidget{
+  final String label;
+
+  _TextBox({ @required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 30,
+        right: 30
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: Colors.white,
+            width: 0.0
+          ),
+          color:  Colors.grey[300]
+        ),
+        child: Container(
+          margin: EdgeInsets.only(
+            bottom: 6.0,
+            right: 4.0,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(4),
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(6)
+            ),
+            border: Border.all(
+              color: Colors.white
+            )
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height*0.02,
+                  right: MediaQuery.of(context).size.width*0.15,
+                  left: MediaQuery.of(context).size.width*0.15,
+                  bottom: MediaQuery.of(context).size.height*0.01
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))
+                ),
+                child: ListTile(
+                  title: Text(
+                    'Random Number',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0
+                    ),
+                  )
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
