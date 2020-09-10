@@ -29,8 +29,45 @@ class NewMatch extends StatelessWidget{
                           height: MediaQuery.of(context).size.height*.1,
                         ),
                      //textbox
-                        _TextBox(label: 'Match ID'),
-                    ],
+                          _TextBox(
+                            label: 'Match ID',
+                            wid: ListTile(
+                              title: Text(
+                              'Random Number',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0
+                              ),
+                            )
+                          ),  
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.08,
+                        ),
+                        _TextBox(
+                          label: 'Name',
+                          wid: TextField(
+                            cursorColor: Colors.black,
+                            decoration: InputDecoration(
+                              hintText: 'Enter your name',
+                              focusColor: Colors.black,
+                              hoverColor: Colors.black,
+                              border: InputBorder.none
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        ),  
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.08,
+                        ),
+                        _ButtonHome(
+                        onPressed: (){}, 
+                        label: 'Start', 
+                        icon: Icons.subdirectory_arrow_right
+                      ),
+                      ],
                     ),
                   //),
                 ), 
@@ -92,8 +129,9 @@ class NewMatch extends StatelessWidget{
 
 class _TextBox extends StatelessWidget{
   final String label;
+  final Widget wid;
 
-  _TextBox({ @required this.label});
+  _TextBox({ @required this.label, @required this.wid});
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +188,8 @@ class _TextBox extends StatelessWidget{
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.all(Radius.circular(10.0))
                 ),
-                child: ListTile(
+                child: wid
+                /*child: ListTile(
                   title: Text(
                     'Random Number',
                     textAlign: TextAlign.center,
@@ -160,7 +199,7 @@ class _TextBox extends StatelessWidget{
                       fontSize: 20.0
                     ),
                   )
-                ),
+                ),*/
               ),
             ],
           ),

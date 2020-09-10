@@ -50,7 +50,7 @@ class Home extends StatelessWidget{
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height*.08,
-                        ),
+                      ),
                       _ButtonHome(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => NewMatch()));
@@ -60,7 +60,7 @@ class Home extends StatelessWidget{
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height*.08,
-                        ),
+                      ),
                       _ButtonHome(
                         onPressed: (){}, 
                         label: 'Rules', 
