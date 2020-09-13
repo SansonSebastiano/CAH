@@ -9,7 +9,7 @@ class NewMatch extends StatefulWidget{
 class _NewMatchState extends State<NewMatch>{
   var rndNum = 10000 + new Random().nextInt(99999 - 10000);
   final _nameInput = TextEditingController();
-  bool _validate = false;
+  //bool _validate = false;
 
   //Important: Call dispose of the TextEditingController when you’ve finished using it. 
   //This ensures that you discard any resources used by the object.
@@ -76,7 +76,7 @@ class _NewMatchState extends State<NewMatch>{
                               focusColor: Colors.black,
                               hoverColor: Colors.black,
                               border: InputBorder.none,
-                              errorText: _validate ? '\u26A0 Name missing!' : null
+                              //errorText: _validate ? '\u26A0 Name missing!' : null
                             ),
                             textAlign: TextAlign.center,
                           )
@@ -87,17 +87,21 @@ class _NewMatchState extends State<NewMatch>{
                         _Button(
                         onPressed: (){
                           setState(() {
-                            _nameInput.text.toString() == null ? _validate = true : _validate = false;
-                            /*if (_nameInput.text.toString() != null) {
+                            //_nameInput.text.toString().isEmpty ? _validate = true : _validate = false;
+                            if (_nameInput.text.toString().isNotEmpty) {
                               return showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    content: Text(_nameInput.text),
+                                    content: Text(
+                                      _nameInput.text,
+                                      textAlign: TextAlign.center,
+                                    
+                                    ),
                                   );
                                 },
                               );
-                            } 
+                            }
                             else {
                               return showDialog(
                                 context: context,
@@ -133,7 +137,7 @@ class _NewMatchState extends State<NewMatch>{
                                   );
                                 },
                               );
-                            }*/
+                            }
                           });
                           /*return showDialog(
                               context: context,
