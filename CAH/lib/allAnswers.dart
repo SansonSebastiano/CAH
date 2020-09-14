@@ -18,7 +18,8 @@ class _AllAnswersState extends State<AllAnswers>{
   }
 
   void getAnswersList() async{
-    answersList = await srv.getAllAnswers();
+    answersList = await srv.loadMatchID();
+    //answersList = await srv.getAllAnswers();
     setState(() {
       
     });

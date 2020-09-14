@@ -48,7 +48,6 @@ class _NewMatchState extends State<NewMatch>{
                         SizedBox(
                           height: MediaQuery.of(context).size.height*.1,
                         ),
-                     //textbox
                           _TextBox(
                             label: 'Match ID',
                             wid: ListTile(
@@ -139,21 +138,12 @@ class _NewMatchState extends State<NewMatch>{
                               );
                             }
                           });
-                          /*return showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  content: Text(_nameInput.text),
-                                );
-                              },
-                            );*/
                         }, 
                         label: 'Start', 
                         icon: Icons.subdirectory_arrow_right
                       ),
                       ],
                     ),
-                  //),
                 ), 
               ),
             ),
