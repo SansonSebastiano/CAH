@@ -46,6 +46,7 @@ class Server {
     
   }
 
+//da capire
   Future<List<String>> loadMatchID() async{
     Completer c = new Completer<List<String>>();
     List<String> list = new List<String>();
@@ -68,5 +69,10 @@ class Server {
     String x = event.snapshot.key;
     idList.add(x);
     return idList;
+  }
+
+  Future<bool> checkMatchID(String input) async {
+    List<String> result = await loadMatchID();
+    return result.contains(input);
   }
 }
