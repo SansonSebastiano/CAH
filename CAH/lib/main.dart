@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:CAH/allAnswers.dart';
 import 'package:CAH/newMatch.dart';
 
-//keyboardType: TextInputType.number,
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

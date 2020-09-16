@@ -1,29 +1,31 @@
-import 'package:CAH/server.dart';
 import 'package:flutter/material.dart';
 
-class AllAnswers extends StatefulWidget{
+import 'package:CAH/server.dart';
+
+class AllAnswers extends StatefulWidget {
   @override
   _AllAnswersState createState() => _AllAnswersState();
 }
 
-class _AllAnswersState extends State<AllAnswers>{
+class _AllAnswersState extends State<AllAnswers> {
 
-  Server srv = Server();
   List<String> answersList;
+  Server svr = Server();
 
   @override
-  void initState(){
-    getAnswersList();
+  void initState() {
+    getAllAnswersList();
     super.initState();
   }
 
-  void getAnswersList() async{
-    answersList = await srv.loadAnswers();
+  void getAllAnswersList() async {
+    answersList = await svr.loadAnswers();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (answersList == null) {
+    if(answersList == null){
       return Scaffold(
         body: Center(
           child: SizedBox(
@@ -36,17 +38,17 @@ class _AllAnswersState extends State<AllAnswers>{
             ),
           ),
         ),
-      );     
-    } else {
+      );
+    }else{  
       return Scaffold(
         backgroundColor: Colors.black,
         body: ListView.builder(
           itemCount: answersList.length,
           itemBuilder: (context, index){
             return Container(
-                height: MediaQuery.of(context).size.height*.4,
-                child: Card(
-                elevation: 5.0,
+              height: MediaQuery.of(context).size.height*.4,
+              child: Card(
+                elevation: 10.0,
                 margin: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width*0.1,
                   right: MediaQuery.of(context).size.width*0.1,
@@ -56,6 +58,7 @@ class _AllAnswersState extends State<AllAnswers>{
                   borderRadius: BorderRadius.circular(10.0)
                 ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     ListTile(
                       title: Text(
@@ -64,104 +67,16 @@ class _AllAnswersState extends State<AllAnswers>{
                           fontWeight: FontWeight.bold,
                           fontSize: 20
                         ),
-                      ),
+                      )
                     )
-                  ],
+                  ]
                 ),
               ),
-            );
-          }
-        ),
-      );
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*class AllAnswers extends StatefulWidget {
-  @override
-  _AllAnswersState createState() => _AllAnswersState();
-}
-
-class _AllAnswersState extends State<AllAnswers> {
-
-  List<String> answers;
-  Server svr = Server();
-
-  @override
-  void initState() {
-    getAn();
-    super.initState();
-  }
-
-  void getAn() async {
-    answers = await svr.getAllAnswers();
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if(answers == null){
-      return Scaffold(
-        body: Center(
-          child: SizedBox(
-            height: 150,
-            width: 150,
-            child: CircularProgressIndicator(
-              value: null,
-            ),
-          ),
-        ),
-      );
-    }else{  
-      return Scaffold(
-        body: ListView.builder(
-          itemCount: answers.length,
-          itemBuilder: (context, index){
-            return ListTile(
-              title: Text(answers[index]),
             );
           },
         ),
       );
     }
   }
-}*/
+} 
+
