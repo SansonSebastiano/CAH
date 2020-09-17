@@ -127,10 +127,11 @@ class _NewMatchState extends State<NewMatch>{
                           ),
                           _Button(
                           onPressed: (){
+                            server.setNewMatch(_nameInput.text, newID.toString());
                             setState(() {
                               //_nameInput.text.toString().isEmpty ? _validate = true : _validate = false;
                               if (_nameInput.text.toString().isNotEmpty) {
-                                return showDialog(
+                                /*return showDialog(
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
@@ -140,7 +141,9 @@ class _NewMatchState extends State<NewMatch>{
                                       ),
                                     );
                                   },
-                                );
+                                );*/
+                                //server.setNewMatch(_nameInput.text, newID.toString());
+                                print('is not empty');
                               }
                               else {
                                 return showDialog(
