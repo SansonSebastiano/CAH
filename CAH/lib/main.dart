@@ -1,7 +1,7 @@
+import 'package:CAH/join.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:CAH/allAnswers.dart';
 import 'package:CAH/newMatch.dart';
 
 void main() => runApp(MyApp());
@@ -46,7 +46,7 @@ class Home extends StatelessWidget{
                         ),
                       _ButtonHome(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AllAnswers()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Join()));
                         }, 
                         label: 'Join', 
                         icon: Icons.person
