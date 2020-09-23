@@ -4,18 +4,19 @@ class Player{
   List<String> answersList = List<String>();
   int score;
 
-  /*Player.fromMap(Map<String, dynamic> map){
-    this.name = map['name'].toString();
+  Map map = {1: 'one', 2: 'two'};
+  
+  
+  
+  Player.fromMap(Map<String, dynamic> map){
+    this.name = map['playerName'].toString();
     this.score = int.parse(map['score'].toString());
     this.answersList = map['answerPerPlayer'] as List<String>;
-    //this.index = int.parse(map[index])
-  }*/
+    this.index = int.parse(map[index]);
+  }
 }
 
-
-
-/*
-  Piatto.fromMap(Map<String,dynamic> map){
+/*Piatto.fromMap(Map<String,dynamic> map){
     this.nome = map['Nome'];
     this.prezzo = (map['Prezzo'] as num).toDouble();
     options = Opzioni();
@@ -38,5 +39,6 @@ class Player{
       "Prezzo": prezzo,
       "Options" : opzioni
     };
-  }
-*/
+  }*/
+
+

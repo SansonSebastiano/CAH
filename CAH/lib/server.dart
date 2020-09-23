@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'package:CAH/player.dart';
+
 //--------------------------------------------------------
 //                     Database Path
 //--------------------------------------------------------
@@ -28,6 +30,8 @@ import 'package:firebase_database/firebase_database.dart';
   //counters
   int lastPlayerIndex;
   int masterIndex;
+  //Player
+  Player player;
 
   class Server{
     Server(){
@@ -86,7 +90,9 @@ import 'package:firebase_database/firebase_database.dart';
     }
 
     Future<List<String>> onPlayerAdded(Event event, List<String> playerList) async{
+      //print('ciao');
       String x = event.snapshot.key;
+      print('x: $x');
       playerList.add(x);
       return playerList;
     }
@@ -95,7 +101,7 @@ import 'package:firebase_database/firebase_database.dart';
         Completer completer = new Completer<List<String>>();
         List<String> list = new List<String>();
         Stream<Event> stream = dbRoot.child(path_matches).child(matchId).child(path_players).onChildAdded;
-
+        
         stream.listen((event) {
           onPlayerAdded(event, list).then((List<String> playerList) {
             return new Future.delayed(new Duration(seconds: 0), ()=> playerList);
@@ -114,9 +120,15 @@ import 'package:firebase_database/firebase_database.dart';
       }
 
       Future<void> addPlayer(String matchID, String playerName, bool isMaster) async{
-        listPlayers = await printPlayersCount(matchID);
-        lastPlayerIndex = listPlayers.length;
-        print(lastPlayerIndex.toString());
+        if (isMaster == true) {
+          lastPlayerIndex = 0;
+        }
+        else{
+          listPlayers = await printPlayersCount(matchID);
+          lastPlayerIndex = listPlayers.length;
+        }
+        
+        print('last player: ${lastPlayerIndex.toString()}');
 
         DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference(); 
         DatabaseReference thisPlayerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(lastPlayerIndex.toString()).reference();
@@ -134,8 +146,8 @@ import 'package:firebase_database/firebase_database.dart';
         playerAdded = true;
       }
 
-      // ignore: missing_return
       Future<void> setNewMatch (String masterName, String matchID){
-        addPlayer(matchID, masterName, true);
+        //print('name: $masterName ID: $matchID');
+        return addPlayer(matchID, masterName, true);
       }
   }
