@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 
 import 'package:CAH/newMatch.dart';
 
+//fare SPLASH SCREEN
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

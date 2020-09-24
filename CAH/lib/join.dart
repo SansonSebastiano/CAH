@@ -1,4 +1,7 @@
+import 'package:CAH/server.dart';
+import 'package:CAH/slavePlayer.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 
 class Join extends StatefulWidget{
@@ -6,10 +9,13 @@ class Join extends StatefulWidget{
   _JoinState createState() => _JoinState();
 }
 
-final _nameInput = TextEditingController();
-final _idInput = TextEditingController();
-
 class _JoinState extends State<Join>{
+
+  Server server = Server();
+
+  final _nameInput = TextEditingController();
+  final _idInput = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +86,29 @@ class _JoinState extends State<Join>{
                       ),
                       _Button(
                         onPressed: () async{
+                          if (_idInput.text.toString().isNotEmpty && _nameInput.text.toString().isNotEmpty) {
+                            var flag = await server.checkMatchID(_idInput.text.toString());
+                            if (flag == true  &&  _idInput.text.toString() != '0') {
+                              server.addPlayer(_idInput.text.toString(), _nameInput.text.toString(), false);
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer()));
+                            } else {
+                              return showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return _AlertDialog(label: 'This ID does not exitst!');
+                                },
+                              );
+                            }
+                          } else {
+                            return showDialog(
+                              context: context,
+                              builder: (context) {
+                                return _AlertDialog(label: 'Fill the fields!');
+                              },
+                            );
+                          }
                         }, 
-                        label: 'Start', 
+                        label: 'Join', 
                         icon: Icons.subdirectory_arrow_right
                       ),
                     ]
@@ -274,6 +301,45 @@ class _Button extends StatelessWidget{
           ),
         ),
       ),
+    );
+  }
+}
+
+class _AlertDialog extends StatelessWidget{
+  final String label;
+
+  _AlertDialog({@required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.red,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0)
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: Icon(
+              Icons.warning,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height*0.02,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ) ,
     );
   }
 }

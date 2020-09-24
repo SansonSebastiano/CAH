@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
 
-//TEST CLASS
-//DON'T DELETE!!!
-
-class AllAnswers extends StatefulWidget {
+class SlavePlayer extends StatefulWidget{
   @override
-  _AllAnswersState createState() => _AllAnswersState();
+  _SlavePlayerState createState() => _SlavePlayerState();
 }
 
-class _AllAnswersState extends State<AllAnswers> {
-
+class _SlavePlayerState extends State<SlavePlayer>{
   List<String> answersList;
   Server svr = Server();
 
@@ -81,5 +77,4 @@ class _AllAnswersState extends State<AllAnswers> {
       );
     }
   }
-} 
-
+}
