@@ -55,6 +55,10 @@ const int max_answers = 3;
       }
     }
 
+    /*Future<List<String>> loadElements(DatabaseReference elementsPath) async{
+
+    }*/
+
     Future<List<String>> loadAnswers() async{
       DataSnapshot snapshot = await dbRoot.child(path_cards).child(path_answers).once();
 
@@ -67,10 +71,10 @@ const int max_answers = 3;
       return list;
     }
 
-    Future<List<String>> onMatchIdAdded(Event event, List<String> idList) async{
-      String x = event.snapshot.key;
-      idList.add(x);
-      return idList;
+    Future<List<String>> onElementAdded(Event event, List<String> list) async{
+        String key = event.snapshot.key;
+        list.add(key);
+        return list;
     }
 
     Future<List<String>> loadMatchID() async{
@@ -79,7 +83,7 @@ const int max_answers = 3;
       Stream<Event> stream = dbRoot.child(path_matches).onChildAdded;
 
       stream.listen((event) {
-        onMatchIdAdded(event, list).then((List<String> idList) {
+        onElementAdded(event, list).then((List<String> idList) {
           return new Future.delayed(new Duration(seconds: 0), ()=> idList);
         }).then((_) {
           if (!completer.isCompleted) {
@@ -95,101 +99,103 @@ const int max_answers = 3;
       return result.contains(input);
     }
 
-    Future<List<String>> onPlayerAdded(Event event, List<String> playerList) async{
-      String x = event.snapshot.key;
-      playerList.add(x);
-      print('player added: $playerList');
-      return playerList;
+    Future<List<String>> countPlayers(String matchId) async{
+      Completer completer = new Completer<List<String>>();
+      List<String> list = new List<String>();
+      Stream<Event> stream = dbRoot.child(path_matches).child(matchId).child(path_players).onChildAdded;
+      
+      stream.listen((event) {
+        onElementAdded(event, list).then((List<String> playerList) {
+          return new Future.delayed(new Duration(seconds: 0), ()=> playerList);
+        }).then((_) {
+          if (!completer.isCompleted) {
+            completer.complete(list);
+          } 
+        });
+      }); 
+      return completer.future;
     }
 
-      Future<List<String>> loadPlayers(String matchId) async{
-        Completer completer = new Completer<List<String>>();
-        List<String> list = new List<String>();
-        Stream<Event> stream = dbRoot.child(path_matches).child(matchId).child(path_players).onChildAdded;
-        
-        stream.listen((event) {
-          onPlayerAdded(event, list).then((List<String> playerList) {
-            return new Future.delayed(new Duration(seconds: 0), ()=> playerList);
-          }).then((_) {
-            if (!completer.isCompleted) {
-              completer.complete(list);
-            } 
-          });
-        }); 
-        return completer.future;
+    Future<List<String>> getPlayersCounter(String matchID) async{
+      List<String> result = await countPlayers(matchID);
+      return result;
+    }
+
+    Future<void> addPlayer(String matchID, String playerName, bool isMaster) async{
+      DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference(); 
+      
+      if (isMaster == true) {
+        lastPlayerIndex = 0;
+        masterIndex = lastPlayerIndex;
+        thisMatchRef.child(path_master).set(masterIndex);
+      }
+      else {
+        listPlayers = await getPlayersCounter(matchID);
+        lastPlayerIndex = listPlayers.length;
       }
 
-      Future<List<String>> getPlayersCount(String matchID) async{
-        List<String> result = await loadPlayers(matchID);
-        print('result: $result');
-        return result;
+      DatabaseReference thisPlayerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(lastPlayerIndex.toString()).reference();
+
+      thisPlayerRef.child(path_player_name).set(playerName);
+      thisPlayerRef.child(path_score).set(0);
+
+      //initAnswers(thisPlayerRef, matchID);
+
+      playerAdded = true;
+    }
+
+    Future<void> setNewMatch (String masterName, String matchID){
+      //print('name: $masterName ID: $matchID');
+      return addPlayer(matchID, masterName, true);
+    }
+
+    Future<void> initAnswers(DatabaseReference dbRef, String matchID) async{
+      List<String> listAns = await loadAnswers();
+      print('list getted: $listAns');
+      var index = 0;
+      while (index < max_answers) {
+        var newAnswer = listAns[new Random().nextInt(listAns.length -1)];
+        print('new Answer: $newAnswer');
+
+
+      }
+    }
+
+    Future<List<String>> loadAnswersUsed(String matchID) async{
+      DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_answersUsed).once();
+
+      var value = snapshot.value;
+      var list = List<String>();
+      
+      for (var answer in value) {
+        list.add(answer.toString());
       }
 
-      Future<void> addPlayer(String matchID, String playerName, bool isMaster) async{
-        DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference(); 
-        
-        if (isMaster == true) {
-          lastPlayerIndex = 0;
-          print('master last player: ${lastPlayerIndex.toString()}');
-          masterIndex = lastPlayerIndex;
-          thisMatchRef.child(path_master).set(masterIndex);
-        }
-        else {
-          listPlayers = await getPlayersCount(matchID);
-          lastPlayerIndex = listPlayers.length;
-          print('not master last player: ${lastPlayerIndex.toString()}');
-        }
+      List<String> length = await getAnswersUsedCounter(matchID);
+      print('length: ${length.length}');
 
-        DatabaseReference thisPlayerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(lastPlayerIndex.toString()).reference();
+      return list;
+    }
 
-        thisPlayerRef.child(path_player_name).set(playerName);
-        thisPlayerRef.child(path_score).set(0);
+    Future<List<String>> countAnswersUsed(String matchId) async{
+      Completer completer = new Completer<List<String>>();
+      List<String> list = new List<String>();
+      Stream<Event> stream = dbRoot.child(path_matches).child(matchId).child(path_answersUsed).onChildAdded;
+      
+      stream.listen((event) {
+        onElementAdded(event, list).then((List<String> ansUsedList) {
+          return new Future.delayed(new Duration(seconds: 0), ()=> ansUsedList);
+        }).then((_) {
+          if (!completer.isCompleted) {
+            completer.complete(list);
+          }
+        });
+      }); 
+      return completer.future;
+    }
 
-        //initAnswers(thisPlayerRef, matchID);
-
-        playerAdded = true;
-      }
-
-      Future<void> setNewMatch (String masterName, String matchID){
-        //print('name: $masterName ID: $matchID');
-        return addPlayer(matchID, masterName, true);
-      }
-
-      Future<void> initAnswers(DatabaseReference dbRef, String matchID) async{
-        List<String> listAns = await loadAnswers();
-        print('list getted: $listAns');
-        var index = 0;
-        while (index < max_answers) {
-          var newAnswer = listAns[new Random().nextInt(listAns.length -1)];
-          print('new Answer: $newAnswer');
-        }
-      }
-
-      Future<List<String>> onAnswerUsedAdded(Event event, List<String> list) async{
-        String x = event.snapshot.key;
-        list.add(x);
-        return list;
-      }
-
-      Future<List<String>> loadAnswersUsed(String matchId) async{
-        Completer completer = new Completer<List<String>>();
-        List<String> list = new List<String>();
-        Stream<Event> stream = dbRoot.child(path_matches).child(matchId).child(path_answersUsed).onChildAdded;
-        
-        stream.listen((event) {
-          onAnswerUsedAdded(event, list).then((List<String> ansUsedList) {
-            return new Future.delayed(new Duration(seconds: 0), ()=> ansUsedList);
-          }).then((_) {
-            if (!completer.isCompleted) {
-              completer.complete(list);
-            }
-          });
-        }); 
-        return completer.future;
-      }
-
-      Future<List<String>> getAnswersUsedCount(String matchID) async{
-        List<String> result = await loadAnswersUsed(matchID);
-        return result;
-      }
+    Future<List<String>> getAnswersUsedCounter(String matchID) async{
+      List<String> result = await countAnswersUsed(matchID);
+      return result;
+    }
   }
