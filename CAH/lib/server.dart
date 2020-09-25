@@ -113,7 +113,7 @@ const int max_answers = 3;
           }).then((_) {
             if (!completer.isCompleted) {
               completer.complete(list);
-            }
+            } 
           });
         }); 
         return completer.future;
@@ -127,7 +127,6 @@ const int max_answers = 3;
 
       Future<void> addPlayer(String matchID, String playerName, bool isMaster) async{
         DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference(); 
-        DatabaseReference thisPlayerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(lastPlayerIndex.toString()).reference();
         
         if (isMaster == true) {
           lastPlayerIndex = 0;
@@ -135,11 +134,13 @@ const int max_answers = 3;
           masterIndex = lastPlayerIndex;
           thisMatchRef.child(path_master).set(masterIndex);
         }
-        else{
+        else {
           listPlayers = await getPlayersCount(matchID);
           lastPlayerIndex = listPlayers.length;
           print('not master last player: ${lastPlayerIndex.toString()}');
         }
+
+        DatabaseReference thisPlayerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(lastPlayerIndex.toString()).reference();
 
         thisPlayerRef.child(path_player_name).set(playerName);
         thisPlayerRef.child(path_score).set(0);
