@@ -3,8 +3,6 @@ class Player{
   String name;
   List<String> answersList = List<String>();
   int score;
-
-  Map map = {1: 'one', 2: 'two'};
   
   /*Player.fromMap(Map<String, dynamic> map){
     this.name = map['playerName'].toString();
