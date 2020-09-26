@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:CAH/masterPlayer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
@@ -129,6 +130,7 @@ class _NewMatchState extends State<NewMatch>{
                             if (_nameInput.text.toString().isNotEmpty) {
                               //print('name: ${_nameInput.text.toString()} id: $newID');
                               await server.setNewMatch(_nameInput.text.toString(), newID.toString());
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer()));
                             }
                             else {
                               return showDialog(
