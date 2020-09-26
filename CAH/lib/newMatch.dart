@@ -130,60 +130,42 @@ class _NewMatchState extends State<NewMatch>{
                               //print('name: ${_nameInput.text.toString()} id: $newID');
                               await server.setNewMatch(_nameInput.text.toString(), newID.toString());
                             }
-                            //setState(() async {
-                              //_nameInput.text.toString().isEmpty ? _validate = true : _validate = false;
-                              /*if (_nameInput.text.toString().isNotEmpty) {
-                                /*return showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: Text(
-                                        _nameInput.text,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    );
-                                  },
-                                );*/
-                                //server.setNewMatch(_nameInput.text, newID.toString());
-                                await server.setNewMatch(_nameInput.text.toString(), newID.toString());
-                              }*/
-                              else {
-                                return showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      backgroundColor: Colors.red,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            child: Icon(
-                                              Icons.warning,
-                                              color: Colors.white,
-                                            ),
+                            else {
+                              return showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0)
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          child: Icon(
+                                            Icons.warning,
+                                            color: Colors.white,
                                           ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context).size.height*0.02,
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context).size.height*0.02,
+                                        ),
+                                        Text(
+                                          'Name missing!',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20
                                           ),
-                                          Text(
-                                            'Name missing!',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ) ,
-                                    );
-                                  },
-                                );
-                              }
-                            //});
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ) ,
+                                  );
+                                },
+                              );
+                            }
                           }, 
                           label: 'Start', 
                           icon: Icons.subdirectory_arrow_right

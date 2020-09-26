@@ -44,11 +44,13 @@ const int max_answers = 3;
   int lastAnswerUsed;
   //Player
   Player player;
+  String playerIndex;
+  String playerName;
+  String playerScore;
+  List<String> playerAnswers;
 
   class Server{
-    Server(){
-      Firebase.initializeApp();
-    }
+    Server(){ Firebase.initializeApp(); }
 
     Future<bool> isConnected() async{
       DataSnapshot dataSnapshot = await dbRoot.child('.info/connected').once();
@@ -70,6 +72,18 @@ const int max_answers = 3;
       var value = snapshot.value;
       var list = List<String>();
       
+      for (var answer in value) {
+        list.add(answer.toString());
+      }
+      return list;
+    }
+
+    Future<List<String>> loadAnswersPerPlayer(DatabaseReference dbRef) async{
+      DataSnapshot snapshot = await dbRef.child(path_answers_per_player).once();
+
+      var value = snapshot.value;
+      var list = List<String>();
+
       for (var answer in value) {
         list.add(answer.toString());
       }
@@ -126,9 +140,9 @@ const int max_answers = 3;
       return result;
     }
 
-    Future<void> addPlayer(String matchID, String playerName, bool isMaster) async{
+    Future<Player> addPlayer(String matchID, String playerName, bool isMaster) async{
       DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference(); 
-      print('list players: ${listPlayers.length}');
+
       if (isMaster == true) {
         lastPlayerIndex = 0;
         masterIndex = lastPlayerIndex;
@@ -143,41 +157,38 @@ const int max_answers = 3;
         masterPlayer = false;
       }
 
-      print('masterPlayer: $masterPlayer');
+      playerIndex = lastPlayerIndex.toString();
 
       DatabaseReference thisPlayerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(lastPlayerIndex.toString()).reference();
 
       thisPlayerRef.child(path_player_name).set(playerName);
       thisPlayerRef.child(path_score).set(0);
 
-      initAnswers(thisPlayerRef, matchID, masterPlayer);
-      //await getAllPlayers(matchID);
+      await initAnswers(thisPlayerRef, matchID, masterPlayer);
+      
+      Player plr = await getPlayer(lastPlayerIndex.toString(), matchID);
+      print('[Server] player answer: ${plr.answersList} - score ${plr.score} - name ${plr.name} - index ${plr.index}');
+
       playerAdded = true;
+      return plr;
     }
 
-    /*Future<void> getAllPlayers(String matchID) async{
-      DatabaseReference currentPlayer = dbRoot.child(path_matches).child(matchID).child(path_players).reference();
-      DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_players).once();
-      DataSnapshot name;
-      DataSnapshot score;
-      List tmp = snapshot.value;
-      print('tmp length ${tmp.length}');
-      for (var i = 0; i < tmp.length; i++) {
-        //name = await currentPlayer.child(i.toString()).child(path_player_name).once();
-        //score = await currentPlayer.child(i.toString()).child(path_score).once();
-        //---------------------------------------------------------------------------------
-        //          NON CANCELLARE!!!!!!!
-        //---------------------------------------------------------------------------------
-        player.index = i;
-        //player.name = name.value;
-        //player.score = score.value;
+    Future<Player> getPlayer(String index, String matchID) async{
+      DatabaseReference playerRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(index).reference();
+      DataSnapshot name = await playerRef.child(path_player_name).once();
+      DataSnapshot score = await playerRef.child(path_score).once();
 
-        print('player: ${player.index} '); 
-      }
-    }*/
+      playerIndex = index;
+      playerName = name.value.toString();
+      playerScore = score.value.toString();
+      playerAnswers = await loadAnswersPerPlayer(playerRef);
+
+      player = new Player(index: int.parse(playerIndex), name: playerName, score: int.parse(playerScore), answersList: playerAnswers);
+      
+      return player;
+    }
 
     Future<void> setNewMatch (String masterName, String matchID){
-      //print('name: $masterName ID: $matchID');
       masterPlayer = true;
       return addPlayer(matchID, masterName, masterPlayer);
     }
@@ -229,9 +240,5 @@ const int max_answers = 3;
       }
 
       return list;
-    }
-
-    Future<List<String>> loadAnswersPerPlayer() async{
-      
     }
   }

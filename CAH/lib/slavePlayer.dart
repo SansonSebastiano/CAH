@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
+import 'package:CAH/player.dart';
 
 class SlavePlayer extends StatefulWidget{
+  final Player player;
+  const SlavePlayer({Key key, @required this.player}) : super(key: key);
+
   @override
   _SlavePlayerState createState() => _SlavePlayerState();
 }
@@ -18,7 +22,7 @@ class _SlavePlayerState extends State<SlavePlayer>{
   }
 
   void getAllAnswersList() async {
-    answersList = await svr.loadAnswers();
+    answersList = player.answersList;
     setState(() {});
   }
 
@@ -62,6 +66,7 @@ class _SlavePlayerState extends State<SlavePlayer>{
                     ListTile(
                       title: Text(
                         answersList[index],
+                        //'[slave screen] \nindex : ${player.index} - \nname : ${player.name} - \nscore : ${player.score} - \nanswers : ${player.answersList}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20

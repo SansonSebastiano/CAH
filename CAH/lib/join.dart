@@ -1,3 +1,4 @@
+import 'package:CAH/player.dart';
 import 'package:CAH/server.dart';
 import 'package:CAH/slavePlayer.dart';
 import 'package:flutter/material.dart';
@@ -89,8 +90,8 @@ class _JoinState extends State<Join>{
                           if (_idInput.text.toString().isNotEmpty && _nameInput.text.toString().isNotEmpty) {
                             var flag = await server.checkMatchID(_idInput.text.toString());
                             if (flag == true  &&  _idInput.text.toString() != '0') {
-                              server.addPlayer(_idInput.text.toString(), _nameInput.text.toString(), false);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer()));
+                              Player player = await server.addPlayer(_idInput.text.toString(), _nameInput.text.toString(), false);
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer(player: player,)));
                             } else {
                               return showDialog(
                                 context: context,
