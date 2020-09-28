@@ -21,7 +21,7 @@ const int max_answers = 3;
   //matches' child
   const String path_matches = 'matches';
   const String path_answersUsed = 'answersUsed';
-  const String path_questionssUsed = 'questionsUsed';
+  const String path_questionsUsed = 'questionsUsed';
   const String path_answersSent = 'answersSent';
     //players
     const String path_players = 'players';
@@ -37,11 +37,13 @@ const int max_answers = 3;
   List<String> listAnswers = List<String>();
   List<Player> listPlayers = List<Player>();
   List<String> listAnswersUsed = List<String>();
+  List<String> listQuestionssUsed = List<String>();
   List<String> listMatchID = List<String>();
   //counters
   int masterIndex;
   int lastPlayerIndex;
   int lastAnswerUsed;
+  int lastQuestionUsed;
   //Player
   Player player;
   String playerIndex;
@@ -74,6 +76,18 @@ const int max_answers = 3;
       
       for (var answer in value) {
         list.add(answer.toString());
+      }
+      return list;
+    }
+
+    Future<List<String>> loadQuestions() async{
+      DataSnapshot snapshot = await dbRoot.child(path_cards).child(path_questions).once();
+
+      var value = snapshot.value;
+      var list = List<String>();
+
+      for (var question in value) {
+        list.add(question.toString());
       }
       return list;
     }
@@ -140,10 +154,10 @@ const int max_answers = 3;
       return result;
     }
 
-    Future<Player> addPlayer(String matchID, String playerName, bool isMaster) async{
+    Future<Player> addPlayer(String matchID, String playerName, bool isFirst) async{
       DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference(); 
 
-      if (isMaster == true) {
+      if (isFirst == true) {
         lastPlayerIndex = 0;
         masterIndex = lastPlayerIndex;
         thisMatchRef.child(path_master).set(masterIndex);
@@ -193,18 +207,49 @@ const int max_answers = 3;
       return addPlayer(matchID, masterName, masterPlayer);
     }
 
-    Future<void> initAnswers(DatabaseReference dbRef, String matchID, bool isMaster) async{
+    Future<String> initQuestions(String matchID, bool isFirst) async{
+      DatabaseReference questionsUsedRef = dbRoot.child(path_matches).child(matchID).child(path_questionsUsed).reference();
+      bool isExisting = false;
+      List<String> listQuestions = await loadQuestions();
+      String newQuestion;
+
+      var index = 0;
+      while (index < 1) {
+        newQuestion = listQuestions[new Random().nextInt(listQuestions.length - 1)];
+        
+        if(isFirst == true){
+          lastQuestionUsed = 0;
+          isFirst = false;
+        } else{
+          List<String> tmp = await loadQuestionsUsed(matchID);
+          lastQuestionUsed = tmp.length;
+
+          isExisting = await checkQuestion(newQuestion, matchID);
+        }
+
+        if (isExisting == false) {
+          questionsUsedRef.child(lastQuestionUsed.toString()).set(newQuestion);
+        }else {
+          continue;
+        }
+        index++;
+      }
+      print('new question : $newQuestion');
+      return newQuestion;
+    }
+
+    Future<void> initAnswers(DatabaseReference dbRef, String matchID, bool isFirst) async{
       DatabaseReference ansUsedRef = dbRoot.child(path_matches).child(matchID).child(path_answersUsed).reference();
       bool isExisting = false;
       List<String> listAns = await loadAnswers();
 
       var index = 0;
       while (index < max_answers) {
-        var newAnswer = listAns[new Random().nextInt(listAns.length -1)];
+        var newAnswer = listAns[new Random().nextInt(listAns.length - 1)];
 
-        if (isMaster == true) {
+        if (isFirst == true) {
           lastAnswerUsed = 0;
-          isMaster = false;
+          isFirst = false;
         } else {
           List<String> tmp = await loadAnswersUsed(matchID);
           lastAnswerUsed = tmp.length;
@@ -229,6 +274,11 @@ const int max_answers = 3;
       return listAnswersUsed.contains(newAnswer);
     }
 
+    Future<bool> checkQuestion(String newQuestion, String matchID) async{
+      listQuestionssUsed = await loadQuestionsUsed(matchID);
+      return listAnswersUsed.contains(newQuestion);
+    }
+
     Future<List<String>> loadAnswersUsed(String matchID) async{
       DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_answersUsed).once();
 
@@ -238,7 +288,18 @@ const int max_answers = 3;
       for (var answer in value) {
         list.add(answer.toString());
       }
+      return list;
+    }
 
+    Future<List<String>> loadQuestionsUsed(String matchID) async{
+      DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_questionsUsed).once();
+
+      var value = snapshot.value;
+      var list = List<String>();
+
+      for (var question in value) {
+        list.add(question.toString());
+      }
       return list;
     }
   }

@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_flip_view/flutter_flip_view.dart';
+
+import 'package:CAH/server.dart';
 
 class MasterPlayer extends StatefulWidget{
+  final String matchID;
+  final bool isFirst;
+  const MasterPlayer({Key key, @required this.matchID, @required this.isFirst}) : super(key: key);
+
   @override 
-  _MasterPlayerState createState() => _MasterPlayerState();
+  _MasterPlayerState createState() => _MasterPlayerState(matchID: matchID, isFirst: isFirst);
 }
 
 class _MasterPlayerState extends State<MasterPlayer>{
+  String question;
+  Server server = Server();
+  final String matchID;
+  final bool isFirst;
+  
+  _MasterPlayerState({@required this.matchID, @required this.isFirst});
 
+  @override
+  void initState(){
+    getQuestion();
+    super.initState();
+  }
+
+  void getQuestion() async{
+    print('[MasterPLayer] matchID: $matchID - isFirst $isFirst');
+    question = await server.initQuestions(matchID, isFirst);
+    print('question : $question');
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +155,7 @@ class _MasterPlayerState extends State<MasterPlayer>{
                       bottom: 10
                     ),
                     child: Text(
-                      'Question get from FB',
+                      question,
                       style: TextStyle(
                         fontSize: 40,
                         color: Colors.white,

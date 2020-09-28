@@ -13,7 +13,7 @@ class SlavePlayer extends StatefulWidget{
 
 class _SlavePlayerState extends State<SlavePlayer>{
   List<String> answersList;
-  Server svr = Server();
+  Server server = Server();
 
   @override
   void initState() {
@@ -21,7 +21,7 @@ class _SlavePlayerState extends State<SlavePlayer>{
     super.initState();
   }
 
-  void getAllAnswersList() async {
+  void getAllAnswersList() {
     answersList = player.answersList;
     setState(() {});
   }

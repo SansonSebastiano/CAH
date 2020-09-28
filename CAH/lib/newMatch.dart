@@ -128,9 +128,8 @@ class _NewMatchState extends State<NewMatch>{
                           _Button(
                           onPressed: () async{
                             if (_nameInput.text.toString().isNotEmpty) {
-                              //print('name: ${_nameInput.text.toString()} id: $newID');
                               await server.setNewMatch(_nameInput.text.toString(), newID.toString());
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true,)));
                             }
                             else {
                               return showDialog(
