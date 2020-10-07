@@ -91,7 +91,7 @@ class _JoinState extends State<Join>{
                             var flag = await server.checkMatchID(_idInput.text.toString());
                             if (flag == true  &&  _idInput.text.toString() != '0') {
                               Player player = await server.addPlayer(_idInput.text.toString(), _nameInput.text.toString(), false);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer(player: player,)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer(player: player, matchID: _idInput.text.toString(),)));
                             } else {
                               return showDialog(
                                 context: context,

@@ -68,7 +68,7 @@ class Home extends StatelessWidget{
                       ),
                       _ButtonHome(
                         onPressed: (){
-                          
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
                         }, 
                         label: 'Rules', 
                         icon: Icons.format_align_center

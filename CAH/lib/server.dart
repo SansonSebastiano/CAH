@@ -302,4 +302,58 @@ const int max_answers = 3;
       }
       return list;
     }
+
+    /*Future<List<String>> countAnswersSent(String matchID) async{
+      Completer completer = new Completer<List<String>>();
+      List<String> list = new List<String>();
+      Stream<Event> stream = dbRoot.child(path_matches).child(matchID).child(path_answersSent).onChildAdded;
+
+      stream.listen((event) { 
+        onElementAdded(event, list).then((List<String> ansSentList){
+          return new Future.delayed(new Duration(seconds: 0), ()=> ansSentList);
+        }).then((_) {
+          if (!completer.isCompleted) {
+            completer.complete(list);
+          }
+        });
+      });
+    
+      return completer.future;
+    }*/
+
+    Future<List<String>> loadAnswerSent(String matchID) async{
+      DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_answersSent).once();
+
+      var value = snapshot.value;
+      var list = List<String>();
+
+      if (value == null) {
+        print('empty');
+        return list;
+      }else{
+        print('not empty');
+        for (var answer in value) {
+          list.add(answer.toString());
+        }
+        return list;
+      }
+    }
+
+    Future<void> sendAnswer(int index, String matchID, Player player) async{
+      DatabaseReference ansSentRef = dbRoot.child(path_matches).child(matchID).child(path_answersSent).reference();
+      String sendAns = player.answersList[index];
+      print('send ans $sendAns');
+
+      List<String> ansSentList = await loadAnswerSent(matchID);
+      int counter = ansSentList.length;
+      print('counter $counter');
+
+      ansSentRef.child(counter.toString()).set(sendAns);
+    }
+
+    Future<bool> pathFirebaseIsExists(DatabaseReference databaseReference) async{
+      DataSnapshot snapshot = await databaseReference.once();
+
+      return snapshot != null;
+    }
   }
