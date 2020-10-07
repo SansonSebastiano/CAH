@@ -12,22 +12,46 @@ class MasterPlayer extends StatefulWidget{
 }
 
 class _MasterPlayerState extends State<MasterPlayer>{
-  String question;
-  Server server = Server();
   final String matchID;
   final bool isFirst;
   
   _MasterPlayerState({@required this.matchID, @required this.isFirst});
 
+  String question;
+  Server server = Server();
+  List<String> sentAns = List<String>();
+  int plrCounter;
+  GlobalKey<RefreshIndicatorState> refreshKey;
+
   @override
   void initState(){
+    refreshKey = GlobalKey<RefreshIndicatorState>();
     getQuestion();
+    getNumPlayers();
+    getSentAns();
     super.initState();
   }
 
   void getQuestion() async{
     question = await server.initQuestions(matchID, isFirst);
     setState(() {});
+  }
+
+  void getNumPlayers() async{
+    var tmp = await server.getPlayersCounter(matchID);
+    plrCounter = tmp.length;
+    setState(() { });
+  }
+
+  void getSentAns() async{
+    sentAns = await server.loadAnswerSent(matchID);
+    setState(() {});
+  }
+
+  Future<Null> refreshList() async{
+    await Future.delayed(Duration(milliseconds: 250));
+    getSentAns();
+    return null;
   }
 
   @override
@@ -68,9 +92,16 @@ class _MasterPlayerState extends State<MasterPlayer>{
                           )
                         ]
                       ),
-                      child: ListView.builder(
-                        itemCount: 3,
-                        itemBuilder: (context, index){
+                      child: RefreshIndicator(
+                        key: refreshKey,
+                        onRefresh: () async{
+                          await refreshList();
+                        },
+                        color: Colors.red,
+                        backgroundColor: Colors.black,
+                        child: ListView.builder(
+                        itemCount: sentAns.length,
+                        itemBuilder: (context, index){                
                           return Container(
                             height: MediaQuery.of(context).size.height*.4,
                             /*child: FlipView(
@@ -105,14 +136,13 @@ class _MasterPlayerState extends State<MasterPlayer>{
                                 children: [
                                   ListTile(
                                     title: Text(
-                                      'ciao',
-                                      //'[slave screen] \nindex : ${player.index} - \nname : ${player.name} - \nscore : ${player.score} - \nanswers : ${player.answersList}',
+                                      sentAns[index],
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20
                                       ),
                                     )
-                                  )
+                                  ),
                                 ]
                               ),
                             ),
@@ -121,58 +151,59 @@ class _MasterPlayerState extends State<MasterPlayer>{
                       ),
                     ),
                   ),
-                ), 
+                ),
               ),
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*.1),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 5.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black,
-                        blurRadius: 5.0,
-                        spreadRadius: 0.5,
-                        //offset: Offset(2.0, 2.0)
-                      )
-                    ],
-                    color: Colors.black,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0)
-                    )
-                  ),
-                  height: MediaQuery.of(context).size.height*.22,
-                  width: MediaQuery.of(context).size.width*.7,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                      top: MediaQuery.of(context).size.width*.15,
-                      bottom: 10
-                    ),
-                    child: Text(
-                      question,
-                      style: TextStyle(
-                        fontSize: 40,
+            ), 
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*.1),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold
+                        width: 5.0,
                       ),
-                      textAlign: TextAlign.center,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 5.0,
+                          spreadRadius: 0.5,
+                          //offset: Offset(2.0, 2.0)
+                        )
+                      ],
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0)
+                      )
                     ),
-                  ),
+                    height: MediaQuery.of(context).size.height*.22,
+                    width: MediaQuery.of(context).size.width*.7,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                        top: MediaQuery.of(context).size.width*.15,
+                        bottom: 10
+                      ),
+                      child: Text(
+                        question,
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
                 )
-              )
-            ),
-          )
-        ],
-      ),
-    )
+              ),
+            )
+          ],
+        ),
+      )
     );
   }
 }

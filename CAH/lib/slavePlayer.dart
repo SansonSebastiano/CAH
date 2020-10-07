@@ -13,11 +13,13 @@ class SlavePlayer extends StatefulWidget{
 }
 
 class _SlavePlayerState extends State<SlavePlayer>{
-  List<String> answersList;
-  Server server = Server();
   final String matchID;
 
   _SlavePlayerState({@required this.matchID});
+
+  List<String> answersList;
+  Server server = Server();
+  int countSentAns = 0;
 
   @override
   void initState() {
@@ -28,6 +30,20 @@ class _SlavePlayerState extends State<SlavePlayer>{
   void getAllAnswersList() {
     answersList = player.answersList;
     setState(() {});
+  }
+
+  removeCard(index){
+    setState(() {
+      player.answersList.remove(index);
+    });
+  }
+
+  showSnackBar(context, answer, index){
+    Scaffold.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.black, 
+      content: Text('$answer sent'),
+      )
+    );
   }
 
   @override
@@ -76,8 +92,20 @@ class _SlavePlayerState extends State<SlavePlayer>{
                   child: InkWell(
                     splashColor: Colors.black,
                     onTap: () async{
-                      print('card tapped n°: $index');
-                      await server.sendAnswer(index, matchID, player);
+                      if (countSentAns < 1) {
+                        print('card tapped n°: $index');
+                        await server.sendAnswer(index, matchID, player);
+                        removeCard(index);
+                        showSnackBar(context, player.answersList[index], index);
+                        countSentAns++;
+                      } else {
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return _AlertDialog(label: 'You can only send only one question!');
+                          },
+                        );
+                      }
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -101,5 +129,44 @@ class _SlavePlayerState extends State<SlavePlayer>{
         )
       );
     }
+  }
+}
+
+class _AlertDialog extends StatelessWidget{
+  final String label;
+
+  _AlertDialog({@required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.red,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0)
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: Icon(
+              Icons.warning,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height*0.02,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ) ,
+    );
   }
 }

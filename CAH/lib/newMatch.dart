@@ -54,6 +54,7 @@ class _NewMatchState extends State<NewMatch>{
       return Scaffold(
         body: Center(
           child: SizedBox(
+            //add mediaquery
             height: 150,
             width: 150,
             child: CircularProgressIndicator(
