@@ -69,88 +69,58 @@ class _MasterPlayerState extends State<MasterPlayer>{
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: EdgeInsets.zero,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width*0.5
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.0),
-                          topRight: Radius.circular(40.0),
-                          bottomLeft: Radius.circular(25.0),
-                          bottomRight: Radius.circular(25.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width*0.45,
                         ),
-                        border: Border.all(
-                          color:  Colors.white,
-                          width: 5.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.0),
+                            topRight: Radius.circular(40.0),
+                            bottomLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0),
+                          ),
+                          border: Border.all(
+                            color:  Colors.white,
+                            width: 5.0,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5.0,
+                              spreadRadius: 0.5,
+                            )
+                          ]
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            blurRadius: 5.0,
-                            spreadRadius: 0.5,
-                          )
-                        ]
-                      ),
-                      child: RefreshIndicator(
-                        key: refreshKey,
-                        onRefresh: () async{
-                          await refreshList();
-                        },
-                        color: Colors.red,
-                        backgroundColor: Colors.black,
-                        child: ListView.builder(
-                        itemCount: sentAns.length,
-                        itemBuilder: (context, index){                
-                          return Container(
-                            height: MediaQuery.of(context).size.height*.4,
-                            /*child: FlipView(
-                              front: Container(
-                                width: 300,
-                                height: 500,
-                                color: Colors.amber,
-                                alignment: Alignment.center,
-                                child: Text('Front'),
-                              ), 
-                              back: Container(
-                                width: 300,
-                                height: 500,
-                                color: Colors.blueGrey,
-                                alignment: Alignment.center,
-                                child: Text('Back'),
-                              ),
-                              animationController: null
-                            ),*/
-                            child: Card(
-                              elevation: 10.0,
-                              margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width*0.1,
-                                right: MediaQuery.of(context).size.width*0.1,
-                                top: MediaQuery.of(context).size.height*0.05
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      sentAns[index],
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20
-                                      ),
-                                    )
-                                  ),
-                                ]
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height*.15,
+                              width: MediaQuery.of(context).size.width*1,
+                            ),
+                            Text(
+                              question,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20
                               ),
                             ),
-                          );
-                        },
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
+                      _ButtonHome(
+                        onPressed: (){
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
+                        }, 
+                        label: 'Read the answers', 
+                        icon: Icons.trending_flat
+                      ),
+                    ],
+                  ),  
                 ),
               ),
             ), 
@@ -182,13 +152,10 @@ class _MasterPlayerState extends State<MasterPlayer>{
                     width: MediaQuery.of(context).size.width*.7,
                     child: Padding(
                       padding: EdgeInsets.only(
-                        left: 15,
-                        right: 15,
-                        top: MediaQuery.of(context).size.width*.15,
-                        bottom: 10
+                        top: MediaQuery.of(context).size.height*0.05,
                       ),
                       child: Text(
-                        question,
+                        'Read the question',
                         style: TextStyle(
                           fontSize: 40,
                           color: Colors.white,
@@ -207,3 +174,112 @@ class _MasterPlayerState extends State<MasterPlayer>{
     );
   }
 }
+
+class _ButtonHome extends StatelessWidget{
+  final Function onPressed;
+  final String label;
+  final IconData icon;
+
+  _ButtonHome({@required this.onPressed, @required this.label, @required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: MediaQuery.of(context).size.width*0.05,
+        right: MediaQuery.of(context).size.width*0.05,
+      ),
+      child: Container(
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height*0.008,
+          right: MediaQuery.of(context).size.width*0.01,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+            topLeft: Radius.circular(20)
+          ),
+          border: Border.all(
+            color: Colors.white
+          )
+        ),
+        child: InkWell(
+          onTap: () => onPressed(),
+          child: ListTile(
+            leading: Icon(
+              icon,
+              color: Colors.black,
+            ),
+            trailing: Icon(
+              icon,
+              color: Colors.transparent,
+            ),
+            title: Text(
+              label.toUpperCase(),
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 15
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ), 
+      ),
+    );
+  }
+}
+
+/*child: FlipView(
+  front: Container(
+    width: 300,
+    height: 500,
+    color: Colors.amber,
+    alignment: Alignment.center,
+    child: Text('Front'),
+  ), 
+  back: Container(
+    width: 300,
+    height: 500,
+    color: Colors.blueGrey,
+    alignment: Alignment.center,
+    child: Text('Back'),
+  ),
+  animationController: null
+),*/
+
+/*child: ListView.builder(
+                      itemCount: sentAns.length,
+                      itemBuilder: (context, index){                
+                        return Container(
+                          height: MediaQuery.of(context).size.height*.4,
+                          child: Card(
+                            elevation: 10.0,
+                            margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width*0.1,
+                              right: MediaQuery.of(context).size.width*0.1,
+                              top: MediaQuery.of(context).size.height*0.05
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    sentAns[index],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20
+                                    ),
+                                  )
+                                ),
+                              ]
+                            ),
+                          ),
+                        );
+                      },
+                    ),*/

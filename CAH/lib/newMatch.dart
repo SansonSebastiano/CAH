@@ -314,8 +314,8 @@ class _Button extends StatelessWidget{
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 30,
-        right: 30
+        left: MediaQuery.of(context).size.width*0.05,
+        right: MediaQuery.of(context).size.width*0.05,
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -328,8 +328,8 @@ class _Button extends StatelessWidget{
         ),
         child: Container(
           margin: EdgeInsets.only(
-            bottom: 6.0,
-            right: 4.0,
+            bottom: MediaQuery.of(context).size.height*0.008,
+            right: MediaQuery.of(context).size.width*0.01,
           ),
           decoration: BoxDecoration(
             color: Colors.white,

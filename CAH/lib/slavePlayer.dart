@@ -95,7 +95,10 @@ class _SlavePlayerState extends State<SlavePlayer>{
                       if (countSentAns < 1) {
                         print('card tapped n°: $index');
                         await server.sendAnswer(index, matchID, player);
-                        removeCard(index);
+                        setState(() {
+                          removeCard(index);
+                        });
+                        
                         showSnackBar(context, player.answersList[index], index);
                         countSentAns++;
                       } else {
