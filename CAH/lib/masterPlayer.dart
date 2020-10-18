@@ -1,20 +1,23 @@
+import 'package:CAH/readAnswers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
 
-class MasterPlayer extends StatefulWidget{
+class MasterPlayer extends StatefulWidget {
   final String matchID;
   final bool isFirst;
-  const MasterPlayer({Key key, @required this.matchID, @required this.isFirst}) : super(key: key);
+  const MasterPlayer({Key key, @required this.matchID, @required this.isFirst})
+      : super(key: key);
 
-  @override 
-  _MasterPlayerState createState() => _MasterPlayerState(matchID: matchID, isFirst: isFirst);
+  @override
+  _MasterPlayerState createState() =>
+      _MasterPlayerState(matchID: matchID, isFirst: isFirst);
 }
 
-class _MasterPlayerState extends State<MasterPlayer>{
+class _MasterPlayerState extends State<MasterPlayer> {
   final String matchID;
   final bool isFirst;
-  
+
   _MasterPlayerState({@required this.matchID, @required this.isFirst});
 
   String question;
@@ -24,7 +27,7 @@ class _MasterPlayerState extends State<MasterPlayer>{
   GlobalKey<RefreshIndicatorState> refreshKey;
 
   @override
-  void initState(){
+  void initState() {
     refreshKey = GlobalKey<RefreshIndicatorState>();
     getQuestion();
     getNumPlayers();
@@ -32,23 +35,23 @@ class _MasterPlayerState extends State<MasterPlayer>{
     super.initState();
   }
 
-  void getQuestion() async{
+  void getQuestion() async {
     question = await server.initQuestions(matchID, isFirst);
     setState(() {});
   }
 
-  void getNumPlayers() async{
+  void getNumPlayers() async {
     var tmp = await server.getPlayersCounter(matchID);
     plrCounter = tmp.length;
-    setState(() { });
+    setState(() {});
   }
 
-  void getSentAns() async{
+  void getSentAns() async {
     sentAns = await server.loadAnswerSent(matchID);
     setState(() {});
   }
 
-  Future<Null> refreshList() async{
+  Future<Null> refreshList() async {
     await Future.delayed(Duration(milliseconds: 250));
     getSentAns();
     return null;
@@ -57,155 +60,148 @@ class _MasterPlayerState extends State<MasterPlayer>{
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
-        return new Future(() => false);
-      }, 
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width*0.45,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40.0),
-                            topRight: Radius.circular(40.0),
-                            bottomLeft: Radius.circular(25.0),
-                            bottomRight: Radius.circular(25.0),
+        onWillPop: () {
+          return new Future(() => false);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.width * 0.45,
                           ),
-                          border: Border.all(
-                            color:  Colors.white,
-                            width: 5.0,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 5.0,
-                              spreadRadius: 0.5,
-                            )
-                          ]
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height*.15,
-                              width: MediaQuery.of(context).size.width*1,
-                            ),
-                            Text(
-                              question,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40.0),
+                                topRight: Radius.circular(40.0),
+                                bottomLeft: Radius.circular(40.0),
+                                bottomRight: Radius.circular(40.0),
                               ),
-                            ),
-                          ],
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 5.0,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black,
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.5,
+                                )
+                              ]),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height *.20,
+                                width: MediaQuery.of(context).size.width * 1,
+                              ),
+                              Text(
+                                'question \n ciao \n dio \n santo',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      _ButtonHome(
-                        onPressed: (){
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
-                        }, 
-                        label: 'Read the answers', 
-                        icon: Icons.trending_flat
-                      ),
-                    ],
-                  ),  
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: _ButtonHome(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID)));
+                              },
+                              label: 'Read the answers',
+                              icon: Icons.trending_flat),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ), 
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*.1),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 5.0,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 5.0,
-                          spreadRadius: 0.5,
-                          //offset: Offset(2.0, 2.0)
-                        )
-                      ],
-                      color: Colors.black,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0)
-                      )
-                    ),
-                    height: MediaQuery.of(context).size.height*.22,
-                    width: MediaQuery.of(context).size.width*.7,
+              Positioned.fill(
+                child: Align(
+                    alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height*0.05,
-                      ),
-                      child: Text(
-                        'Read the question',
-                        style: TextStyle(
-                          fontSize: 40,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )
-                )
-              ),
-            )
-          ],
-        ),
-      )
-    );
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * .1),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 5.0,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black,
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.5,
+                                  //offset: Offset(2.0, 2.0)
+                                )
+                              ],
+                              color: Colors.black,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          height: MediaQuery.of(context).size.height * .22,
+                          width: MediaQuery.of(context).size.width * .7,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.05,
+                            ),
+                            child: Text(
+                              'Read the question',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ))),
+              )
+            ],
+          ),
+        ));
   }
 }
 
-class _ButtonHome extends StatelessWidget{
+class _ButtonHome extends StatelessWidget {
   final Function onPressed;
   final String label;
   final IconData icon;
 
-  _ButtonHome({@required this.onPressed, @required this.label, @required this.icon});
+  _ButtonHome(
+      {@required this.onPressed, @required this.label, @required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: MediaQuery.of(context).size.width*0.05,
-        right: MediaQuery.of(context).size.width*0.05,
+        left: MediaQuery.of(context).size.width * 0.05,
+        right: MediaQuery.of(context).size.width * 0.05,
       ),
       child: Container(
         margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).size.height*0.008,
-          right: MediaQuery.of(context).size.width*0.01,
+          bottom: MediaQuery.of(context).size.height * 0.008,
+          right: MediaQuery.of(context).size.width * 0.01,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-            bottomLeft: Radius.circular(20),
-            topLeft: Radius.circular(20)
-          ),
-          border: Border.all(
-            color: Colors.white
-          )
-        ),
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+                topLeft: Radius.circular(20)),
+            border: Border.all(color: Colors.white)),
         child: InkWell(
           onTap: () => onPressed(),
           child: ListTile(
@@ -219,14 +215,11 @@ class _ButtonHome extends StatelessWidget{
             ),
             title: Text(
               label.toUpperCase(),
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 15
-              ),
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
               textAlign: TextAlign.center,
             ),
           ),
-        ), 
+        ),
       ),
     );
   }
