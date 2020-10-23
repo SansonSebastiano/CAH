@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:CAH/server.dart';
 import 'package:CAH/player.dart';
 
-class SlavePlayer extends StatefulWidget{
+class SlavePlayer extends StatefulWidget {
   final Player player;
   final String matchID;
-  const SlavePlayer({Key key, @required this.player, @required this.matchID}) : super(key: key);
+  const SlavePlayer({Key key, @required this.player, @required this.matchID})
+      : super(key: key);
 
   @override
   _SlavePlayerState createState() => _SlavePlayerState(matchID: matchID);
 }
 
-class _SlavePlayerState extends State<SlavePlayer>{
+class _SlavePlayerState extends State<SlavePlayer> {
   final String matchID;
 
   _SlavePlayerState({@required this.matchID});
@@ -32,121 +33,119 @@ class _SlavePlayerState extends State<SlavePlayer>{
     setState(() {});
   }
 
-  removeCard(index){
+  removeCard(index) {
     setState(() {
       player.answersList.remove(index);
     });
   }
 
-  showSnackBar(context, answer, index){
+  showSnackBar(context, answer, index) {
     Scaffold.of(context).showSnackBar(SnackBar(
-      backgroundColor: Colors.black, 
+      backgroundColor: Colors.black,
       content: Text('$answer sent'),
-      )
-    );
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    if(answersList == null){
-      return WillPopScope( 
-        onWillPop: (){
-          return new Future(() => false);
-        },
-        child: Scaffold(
-        body: Center(
-          child: SizedBox(
-            height: 150,
-            width: 150,
-            child: CircularProgressIndicator(
-              value: null,
-              backgroundColor: Colors.black,
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
-            ),
-          ),
-        ),
-      )
-    );
-    }else{  
-      return WillPopScope( 
-        onWillPop: (){
-          return new Future(() => false);
-        },
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: ListView.builder(
-            itemCount: answersList.length,
-            itemBuilder: (context, index){
-              return Container(
-                height: MediaQuery.of(context).size.height*.4,
-                child: Card(
-                  elevation: 10.0,
-                  margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width*0.1,
-                    right: MediaQuery.of(context).size.width*0.1,
-                    top: MediaQuery.of(context).size.height*0.025
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)
-                  ),
-                  child: InkWell(
-                    splashColor: Colors.black,
-                    onTap: () async{
-                      if (countSentAns < 1) {
-                        print('card tapped n°: $index');
-                        await server.sendAnswer(index, matchID, player);
-                        setState(() {
-                          removeCard(index);
-                        });
-                        
-                        showSnackBar(context, player.answersList[index], index);
-                        countSentAns++;
-                      } else {
-                        return showDialog(
-                          context: context,
-                          builder: (context) {
-                            return _AlertDialog(label: 'You can only send only one question!');
-                          },
-                        );
-                      }
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: Text(
-                            answersList[index],
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20
-                            ),
-                          )
-                        ),
-                      ]
-                    ),
-                  )
+    if (answersList == null) {
+      return WillPopScope(
+          onWillPop: () {
+            return new Future(() => false);
+          },
+          child: Scaffold(
+            body: Center(
+              child: SizedBox(
+                height: 150,
+                width: 150,
+                child: CircularProgressIndicator(
+                  value: null,
+                  backgroundColor: Colors.black,
+                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
                 ),
-              );
-            },
-          ),
-        )
-      );
+              ),
+            ),
+          ));
+    } else {
+      return WillPopScope(
+          onWillPop: () {
+            return new Future(() => false);
+          },
+          child: Scaffold(
+            backgroundColor: Colors.black,
+            body: ListView.builder(
+              //key: Key(answersList.length.toString()),
+              itemCount: answersList.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  height: MediaQuery.of(context).size.height * .4,
+                  child: Card(
+                      elevation: 10.0,
+                      margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.1,
+                          right: MediaQuery.of(context).size.width * 0.1,
+                          top: MediaQuery.of(context).size.height * 0.025),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: InkWell(
+                        splashColor: Colors.black,
+                        onTap: () async {
+                          if (countSentAns < 1) {
+                            return showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return _YNAlertDialog(
+                                    label: 'Are you sure to send this answer?',
+                                    onYesPressed: () {
+                                    },
+                                    onNoPressed: () {
+                                    },
+                                  );
+                                });
+                          } else {
+                            return showDialog(
+                              context: context,
+                              builder: (context) {
+                                return _AlertDialog(
+                                    label:
+                                        'You can only send only one question!');
+                              },
+                            );
+                          }
+                        },
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          ListTile(
+                            title: Text(
+                              answersList[index],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            onTap: () => removeCard(index),
+                          ),
+                        ]),
+                      )),
+                );
+              },
+            ),
+          ));
     }
   }
 }
 
-class _AlertDialog extends StatelessWidget{
+class _AlertDialog extends StatelessWidget {
   final String label;
+  final Widget yesButton;
+  final Widget noButton;
 
-  _AlertDialog({@required this.label});
+  _AlertDialog({@required this.label, this.yesButton, this.noButton});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.red,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -157,19 +156,70 @@ class _AlertDialog extends StatelessWidget{
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height * 0.02,
           ),
           Text(
             label,
             style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20
-            ),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
             textAlign: TextAlign.center,
           ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              yesButton,
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.1,
+              ),
+              noButton
+            ],
+          ),
         ],
-      ) ,
+      ),
     );
   }
 }
+
+class _YNAlertDialog extends _AlertDialog {
+  final String label;
+  final Function onYesPressed;
+  final Function onNoPressed;
+
+  _YNAlertDialog(
+      {@required this.label,
+      @required this.onYesPressed,
+      @required this.onNoPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return _AlertDialog(
+      label: label,
+      yesButton: RaisedButton(
+        onPressed: () => onYesPressed,
+        color: Colors.white,
+        child: const Text(
+          'Yes',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      noButton: RaisedButton(
+        onPressed: () => onNoPressed,
+        color: Colors.white,
+        child: const Text(
+          'No',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+/*print('card tapped n°: $index');
+                            await server.sendAnswer(index, matchID, player);
+                            //CREATE AN ALERT DIALOG WITH YES or NO options
+                            showSnackBar( context, player.answersList[index], index );
+                            countSentAns++; */
