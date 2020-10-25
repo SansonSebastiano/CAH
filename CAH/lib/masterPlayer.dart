@@ -114,6 +114,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
                             ],
                           ),
                         ),
+                        //FARE UN SHOWDIALOG CON CIRCULAR PROGRESS CHE RIMANE IN ATTESA FINO A QUANDO TUTTI I GIOCATORI HANNO RISPOSTO
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: _ButtonHome(

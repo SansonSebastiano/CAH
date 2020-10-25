@@ -95,13 +95,68 @@ class _SlavePlayerState extends State<SlavePlayer> {
                                 barrierDismissible: false,
                                 context: context,
                                 builder: (context) {
-                                  return _YNAlertDialog(
-                                    label: 'Are you sure to send this answer?',
-                                    onYesPressed: () {
-                                    },
-                                    onNoPressed: () {
-                                    },
-                                  );
+                                  return AlertDialog(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      title: Text(
+                                          'Are you sure to send this answer?',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                          textAlign: TextAlign.center),
+                                      actions: [
+                                        RaisedButton(
+                                          onPressed: () async {
+                                            print('card tapped n°: $index');
+                                            await server.sendAnswer(
+                                                index, matchID, player);
+                                            //CREATE AN ALERT DIALOG WITH YES or NO options
+                                            showSnackBar(
+                                                context,
+                                                player.answersList[index],
+                                                index);
+                                            countSentAns++;
+                                            Navigator.of(context).pop();
+                                          },
+                                          elevation: 5,
+                                          color: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            //side: BorderSide(color: Colors.red)
+                                          ),
+                                          child: const Text(
+                                            'Yes',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        RaisedButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                          elevation: 5,
+                                          color: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            //side: BorderSide(color: Colors.red)
+                                          ),
+                                          child: const Text(
+                                            'No',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ]);
                                 });
                           } else {
                             return showDialog(
@@ -164,18 +219,21 @@ class _AlertDialog extends StatelessWidget {
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              yesButton,
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
-              ),
-              noButton
-            ],
-          ),
         ],
       ),
+      actions: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            yesButton,
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.1,
+            ),
+            noButton
+          ],
+        ),
+      ],
     );
   }
 }
@@ -218,8 +276,60 @@ class _YNAlertDialog extends _AlertDialog {
   }
 }
 
+class TestAD extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        backgroundColor: Colors.red,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        title: Text('Are you sure to send this answer?',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            textAlign: TextAlign.center),
+        actions: [
+          RaisedButton(
+            onPressed: () {
+              print('yes pressed');
+            },
+            elevation: 5,
+            color: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              //side: BorderSide(color: Colors.red)
+            ),
+            child: const Text(
+              'Yes',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          RaisedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            elevation: 5,
+            color: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              //side: BorderSide(color: Colors.red)
+            ),
+            child: const Text(
+              'No',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ]);
+  }
+}
+
 /*print('card tapped n°: $index');
-                            await server.sendAnswer(index, matchID, player);
-                            //CREATE AN ALERT DIALOG WITH YES or NO options
-                            showSnackBar( context, player.answersList[index], index );
-                            countSentAns++; */
+  await server.sendAnswer(index, matchID, player);
+  //CREATE AN ALERT DIALOG WITH YES or NO options
+  showSnackBar( context, player.answersList[index], index );
+  countSentAns++; */
