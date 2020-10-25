@@ -341,6 +341,7 @@ const int max_answers = 3;
 
     Future<void> sendAnswer(int index, String matchID, Player player) async{
       DatabaseReference ansSentRef = dbRoot.child(path_matches).child(matchID).child(path_answersSent).reference();
+      DatabaseReference delThisAnswer = dbRoot.child(path_matches).child(matchID).child(path_players).child(player.index.toString()).child(path_answers_per_player).reference();
       String sendAns = player.answersList[index];
       print('send ans $sendAns');
 
@@ -349,6 +350,7 @@ const int max_answers = 3;
       print('counter $counter');
 
       ansSentRef.child(counter.toString()).set(sendAns);
+      delThisAnswer.child(index.toString()).remove();
     }
 
     Future<bool> pathFirebaseIsExists(DatabaseReference databaseReference) async{
