@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:CAH/server.dart';
 import 'package:CAH/player.dart';
@@ -21,6 +22,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
   List<String> answersList;
   Server server = Server();
   int countSentAns = 0;
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -73,7 +75,77 @@ class _SlavePlayerState extends State<SlavePlayer> {
           },
           child: Scaffold(
             backgroundColor: Colors.black,
-            body: ListView.builder(
+            body: AnimatedList(
+              key: _listKey,
+              initialItemCount: listAnswers.length,
+              itemBuilder: (BuildContext context, int index, Animation animation){
+                return SizeTransition(
+                  sizeFactor: animation,
+                  axis: Axis.vertical,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * .4,
+                    child: Card(
+                        elevation: 10.0,
+                        margin: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.1,
+                            right: MediaQuery.of(context).size.width * 0.1,
+                            top: MediaQuery.of(context).size.height * 0.025),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: InkWell(
+                          splashColor: Colors.black,
+                          onTap: () {
+                            if (countSentAns < 1) {
+                              return showDialog(
+                                context: context,
+                                builder:  (context){
+                                  return _YNAlertDialog(
+                                    label: 'Are you sure to send this answer?', 
+                                    onYesPressed: () async    {
+                                      print('card tapped n°: $index');
+                                      await server.sendAnswer(index, matchID, player);
+                                      //showSnackBar( context, player.answersList[index], index );
+                                      //removeCard(index);      NON FUNZIONA
+                                      countSentAns++;
+                                      Navigator.of(context).pop();
+                                    }, 
+                                    onNoPressed: (){
+                                      Navigator.of(context).pop();
+                                    }                            
+                                  );
+                                }
+                              );
+                            } else {
+                              return showDialog(
+                                //barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return _AlertDialog(
+                                    label:'You can only send only one question!',
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          child: Column(mainAxisSize: MainAxisSize.min, children: [
+                              ListTile(
+                                title: Text(
+                                  answersList[index],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold, 
+                                    fontSize: 20
+                                  ),
+                                ),
+                              ),
+                            ]
+                          ),
+                        ),
+                      ),
+                  ),
+                );
+              }
+            ),
+            /*ListView.builder(
               //key: Key(answersList.length.toString()),
               itemCount: answersList.length,
               itemBuilder: (context, index) {
@@ -138,7 +210,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
                     ),
                 );
               },
-            ),
+            ),*/
           )
         );
     }
