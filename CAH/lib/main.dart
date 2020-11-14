@@ -1,4 +1,5 @@
 import 'package:CAH/join.dart';
+import 'package:CAH/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -68,7 +69,7 @@ class Home extends StatelessWidget{
                       ),
                       _ButtonHome(
                         onPressed: (){
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => Test()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedListSample()));
                         }, 
                         label: 'Rules', 
                         icon: Icons.format_align_center

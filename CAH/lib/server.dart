@@ -353,6 +353,31 @@ const int max_answers = 3;
       delThisAnswer.child(index.toString()).remove();
     }
 
+    Future<void> refillAnswer(Player player, String matchID) async{
+      DatabaseReference ansUsedRef = dbRoot.child(path_matches).child(matchID).child(path_answersUsed).reference();
+      DatabaseReference plrRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(player.index.toString()).child(path_answers_per_player).reference();
+      bool isExisting = false;
+      List<String> listAns = await loadAnswers();
+
+      var index = 0;
+      while (index < 1) {
+        var newAnswer = listAns[new Random().nextInt(listAns.length - 1)];
+
+        List<String> tmp = await loadAnswersUsed(matchID);
+        lastAnswerUsed = tmp.length;
+
+        isExisting = await checkAnswer(newAnswer, matchID);
+        if (isExisting == false) {
+          int lastPos = player.answersList.length+1;
+          plrRef.child(lastPos.toString()).set(newAnswer);
+          ansUsedRef.child(lastAnswerUsed.toString()).set(newAnswer);
+        } else {
+          continue;
+        }
+        index++;
+      }
+    }
+
     Future<bool> pathFirebaseIsExists(DatabaseReference databaseReference) async{
       DataSnapshot snapshot = await databaseReference.once();
 

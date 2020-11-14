@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:CAH/server.dart';
 import 'package:CAH/player.dart';
@@ -47,6 +46,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
       content: Text('$answer sent'),
     ));
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -70,152 +70,97 @@ class _SlavePlayerState extends State<SlavePlayer> {
           ));
     } else {
       return WillPopScope(
-          onWillPop: () {
-            return new Future(() => false);
-          },
-          child: Scaffold(
-            backgroundColor: Colors.black,
-            body: AnimatedList(
-              key: _listKey,
-              initialItemCount: listAnswers.length,
-              itemBuilder: (BuildContext context, int index, Animation animation){
-                return SizeTransition(
-                  sizeFactor: animation,
-                  axis: Axis.vertical,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * .4,
-                    child: Card(
-                        elevation: 10.0,
-                        margin: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.1,
-                            right: MediaQuery.of(context).size.width * 0.1,
-                            top: MediaQuery.of(context).size.height * 0.025),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: InkWell(
-                          splashColor: Colors.black,
-                          onTap: () {
-                            if (countSentAns < 1) {
-                              return showDialog(
-                                context: context,
-                                builder:  (context){
-                                  return _YNAlertDialog(
-                                    label: 'Are you sure to send this answer?', 
-                                    onYesPressed: () async    {
-                                      print('card tapped n°: $index');
-                                      await server.sendAnswer(index, matchID, player);
-                                      //showSnackBar( context, player.answersList[index], index );
-                                      //removeCard(index);      NON FUNZIONA
-                                      countSentAns++;
-                                      Navigator.of(context).pop();
-                                    }, 
-                                    onNoPressed: (){
-                                      Navigator.of(context).pop();
-                                    }                            
-                                  );
-                                }
-                              );
-                            } else {
-                              return showDialog(
-                                //barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return _AlertDialog(
-                                    label:'You can only send only one question!',
-                                  );
-                                },
-                              );
-                            }
-                          },
-                          child: Column(mainAxisSize: MainAxisSize.min, children: [
-                              ListTile(
-                                title: Text(
-                                  answersList[index],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold, 
-                                    fontSize: 20
-                                  ),
-                                ),
-                              ),
-                            ]
-                          ),
-                        ),
-                      ),
-                  ),
-                );
-              }
-            ),
-            /*ListView.builder(
-              //key: Key(answersList.length.toString()),
-              itemCount: answersList.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  height: MediaQuery.of(context).size.height * .4,
-                  child: Card(
-                      elevation: 10.0,
-                      margin: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.1,
-                          right: MediaQuery.of(context).size.width * 0.1,
-                          top: MediaQuery.of(context).size.height * 0.025),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: InkWell(
-                        splashColor: Colors.black,
-                        onTap: () {
-                          if (countSentAns < 1) {
-                            return showDialog(
-                              context: context,
-                              builder:  (context){
-                                return _YNAlertDialog(
-                                  label: 'Are you sure to send this answer?', 
-                                  onYesPressed: () async    {
-                                    print('card tapped n°: $index');
-                                    await server.sendAnswer(index, matchID, player);
-                                    //showSnackBar( context, player.answersList[index], index );
-                                    //removeCard(index);      NON FUNZIONA
-                                    countSentAns++;
-                                    Navigator.of(context).pop();
-                                  }, 
-                                  onNoPressed: (){
-                                    Navigator.of(context).pop();
-                                  }                            
-                                );
-                              }
-                            );
-                          } else {
-                            return showDialog(
-                              //barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return _AlertDialog(
-                                  label:'You can only send only one question!',
-                                );
-                              },
-                            );
-                          }
-                        },
-                        child: Column(mainAxisSize: MainAxisSize.min, children: [
-                            ListTile(
-                              title: Text(
-                                answersList[index],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold, 
-                                  fontSize: 20
-                                ),
-                              ),
-                            ),
-                          ]
-                        ),
-                      ),
-                    ),
-                );
-              },
-            ),*/
+        onWillPop: () {
+          return new Future(() => false);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: AnimatedList(
+            key: _listKey,
+            initialItemCount: answersList.length,
+            itemBuilder: (context, index, animation) {
+              return _buildItem(context, answersList[index], animation, index);
+            }
           )
-        );
+        )
+      );
     }
   }
+
+  Widget _buildItem(BuildContext context, String item, Animation<double> animation, int index){
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: SizeTransition(
+        sizeFactor: animation,
+        axis: Axis.vertical,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * .5,
+          child: Card(
+            child: InkWell(
+              splashColor: Colors.black,
+              child: Center(
+              child: Text(
+                item,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 20
+                ),
+              ),
+            ),
+              onTap: () {
+                if (countSentAns < 1) {
+                  return showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _YNAlertDialog(
+                        label: 'Are you sure to send this answer?', 
+                        onYesPressed: () async {
+                          await server.sendAnswer(index, matchID, player);
+                          _removeItemAt(index);
+                          
+                          await server.refillAnswer(player, matchID);
+                          _addItemAt(); //doesn't work
+
+                          countSentAns++;
+                          Navigator.of(context).pop();
+                        }, 
+                        onNoPressed: (){
+                          Navigator.of(context).pop();
+                        }
+                      );
+                    },
+                  );
+                } else {
+                  return showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _AlertDialog(
+                        label: 'You can only send only one question!'
+                      );
+                    },
+                  );
+                }
+              }
+            )
+          ),
+        ),
+      ),
+    );
+  }
+  void _removeItemAt(int index){
+    String removedItem = answersList.removeAt(index);
+    AnimatedListRemovedItemBuilder builder = (context, animation){
+      return _buildItem(context, removedItem, animation, index);
+    };
+    _listKey.currentState.removeItem(index, builder);
+  }
+
+  void _addItemAt(){
+    _listKey.currentState.insertItem(answersList.length);
+  }
 }
+
+  
 
 class _AlertDialog extends StatelessWidget {
   final String label;
@@ -407,3 +352,71 @@ class _YNAlertDialog extends StatelessWidget {
   await server.sendAnswer(index, matchID, player);
   showSnackBar( context, player.answersList[index], index );
   countSentAns++; */
+
+
+/*ListView.builder(
+              //key: Key(answersList.length.toString()),
+              itemCount: answersList.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  height: MediaQuery.of(context).size.height * .4,
+                  child: Card(
+                      elevation: 10.0,
+                      margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.1,
+                          right: MediaQuery.of(context).size.width * 0.1,
+                          top: MediaQuery.of(context).size.height * 0.025),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: InkWell(
+                        splashColor: Colors.black,
+                        onTap: () {
+                          if (countSentAns < 1) {
+                            return showDialog(
+                              context: context,
+                              builder:  (context){
+                                return _YNAlertDialog(
+                                  label: 'Are you sure to send this answer?', 
+                                  onYesPressed: () async    {
+                                    print('card tapped n°: $index');
+                                    await server.sendAnswer(index, matchID, player);
+                                    //showSnackBar( context, player.answersList[index], index );
+                                    //removeCard(index);      NON FUNZIONA
+                                    countSentAns++;
+                                    Navigator.of(context).pop();
+                                  }, 
+                                  onNoPressed: (){
+                                    Navigator.of(context).pop();
+                                  }                            
+                                );
+                              }
+                            );
+                          } else {
+                            return showDialog(
+                              //barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return _AlertDialog(
+                                  label:'You can only send only one question!',
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: Column(mainAxisSize: MainAxisSize.min, children: [
+                            ListTile(
+                              title: Text(
+                                answersList[index],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold, 
+                                  fontSize: 20
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                      ),
+                    ),
+                );
+              },
+            ),*/
