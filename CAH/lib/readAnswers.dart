@@ -45,17 +45,33 @@ class _ReadAnswersState extends State<ReadAnswers> {
           },
           child: Scaffold(
             body: Center(
-              child: SizedBox(
-                height: 150,
-                width: 150,
-                child: CircularProgressIndicator(
-                  value: null,
-                  backgroundColor: Colors.black,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
-                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.15,
+                      width: MediaQuery.of(context).size.width*.3,
+                      child: CircularProgressIndicator(
+                        value: null,
+                        backgroundColor: Colors.black,
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.1,
+                    ),
+                    Text(
+                      "Wait for each player to have answer...",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20
+                      )
+                    )
+                  ],
               ),
             ),
-          ));
+          )
+        );
     }
     return WillPopScope(
       onWillPop: () {
@@ -86,7 +102,9 @@ class _ReadAnswersState extends State<ReadAnswers> {
                           title: Text(
                             answersSent[index],
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                              fontWeight: FontWeight.bold, 
+                              fontSize: 20
+                            ),
                           ),
                         )
                       ],

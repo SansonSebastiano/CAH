@@ -90,7 +90,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
   Widget _buildItem(BuildContext context, String item, Animation<double> animation, int index){
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: SizeTransition(
+      child: SizeTransition(    //ci sono altre animazioni
         sizeFactor: animation,
         axis: Axis.vertical,
         child: SizedBox(

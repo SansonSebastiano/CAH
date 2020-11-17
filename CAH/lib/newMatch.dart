@@ -53,16 +53,30 @@ class _NewMatchState extends State<NewMatch>{
     if(newID == null){
       return Scaffold(
         body: Center(
-          child: SizedBox(
-            //add mediaquery
-            height: 150,
-            width: 150,
-            child: CircularProgressIndicator(
-              value: null,
-              backgroundColor: Colors.black,
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
-            ),
-          ),
+          child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.15,
+                      width: MediaQuery.of(context).size.width*.3,
+                      child: CircularProgressIndicator(
+                        value: null,
+                        backgroundColor: Colors.black,
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.1,
+                    ),
+                    Text(
+                      "Generating new ID...",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20
+                      )
+                    )
+                  ],
+              ),
         ),
       );
     }else{  

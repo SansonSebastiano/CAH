@@ -24,11 +24,11 @@ class _MasterPlayerState extends State<MasterPlayer> {
   Server server = Server();
   List<String> sentAns = List<String>();
   int plrCounter;
-  GlobalKey<RefreshIndicatorState> refreshKey;
+  //GlobalKey<RefreshIndicatorState> refreshKey;
 
   @override
   void initState() {
-    refreshKey = GlobalKey<RefreshIndicatorState>();
+    //refreshKey = GlobalKey<RefreshIndicatorState>();
     getQuestion();
     getNumPlayers();
     getSentAns();
@@ -105,7 +105,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
                                 width: MediaQuery.of(context).size.width * 1,
                               ),
                               Text(
-                                'question \n ciao \n dio \n santo',
+                                question,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -119,6 +119,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
                           alignment: Alignment.bottomCenter,
                           child: _ButtonHome(
                               onPressed: () {
+                                //WARNING: se non ci sono altri giocatori da errore
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID)));
                               },
                               label: 'Read the answers',
