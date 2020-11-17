@@ -94,8 +94,11 @@ class _SlavePlayerState extends State<SlavePlayer> {
         sizeFactor: animation,
         axis: Axis.vertical,
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * .5,
+          height: MediaQuery.of(context).size.height *.5,
           child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0)
+            ),
             child: InkWell(
               splashColor: Colors.black,
               child: Center(
@@ -108,6 +111,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
               ),
             ),
               onTap: () {
+                //N.B. esistono domande che richiedono due risposte
                 if (countSentAns < 1) {
                   return showDialog(
                     context: context,
@@ -118,8 +122,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
                           await server.sendAnswer(index, matchID, player);
                           _removeItemAt(index);
                           
-                          await server.refillAnswer(player, matchID);
-                          _addItemAt(); //doesn't work
+                          _addItemAt(await server.refillAnswer(player, matchID), answersList.length);
 
                           countSentAns++;
                           Navigator.of(context).pop();
@@ -155,12 +158,11 @@ class _SlavePlayerState extends State<SlavePlayer> {
     _listKey.currentState.removeItem(index, builder);
   }
 
-  void _addItemAt(){
-    _listKey.currentState.insertItem(answersList.length);
+  void _addItemAt(String element, int index){
+    answersList.insert(index, element);
+    _listKey.currentState.insertItem(index);
   }
 }
-
-  
 
 class _AlertDialog extends StatelessWidget {
   final String label;

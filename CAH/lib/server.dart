@@ -353,15 +353,17 @@ const int max_answers = 3;
       delThisAnswer.child(index.toString()).remove();
     }
 
-    Future<void> refillAnswer(Player player, String matchID) async{
+    Future<String> refillAnswer(Player player, String matchID) async{
       DatabaseReference ansUsedRef = dbRoot.child(path_matches).child(matchID).child(path_answersUsed).reference();
       DatabaseReference plrRef = dbRoot.child(path_matches).child(matchID).child(path_players).child(player.index.toString()).child(path_answers_per_player).reference();
       bool isExisting = false;
       List<String> listAns = await loadAnswers();
 
+      String newAnswer;
       var index = 0;
+      //N.B. esistono domande che richiedono due risposte
       while (index < 1) {
-        var newAnswer = listAns[new Random().nextInt(listAns.length - 1)];
+        newAnswer = listAns[new Random().nextInt(listAns.length - 1)];
 
         List<String> tmp = await loadAnswersUsed(matchID);
         lastAnswerUsed = tmp.length;
@@ -376,6 +378,8 @@ const int max_answers = 3;
         }
         index++;
       }
+      print("refill answer: $newAnswer");
+      return newAnswer;
     }
 
     Future<bool> pathFirebaseIsExists(DatabaseReference databaseReference) async{
