@@ -62,9 +62,11 @@ class _ReadAnswersState extends State<ReadAnswers> {
                     ),
                     Text(
                       "Wait for each player to have answer...",
+
                       style: TextStyle(
                         fontWeight: FontWeight.bold, 
-                        fontSize: 20
+                        fontSize: 20,
+                        decoration: TextDecoration.none
                       )
                     )
                   ],

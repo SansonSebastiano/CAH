@@ -1,83 +1,78 @@
 import 'dart:async';
-import 'package:CAH/join.dart';
-import 'package:CAH/newMatch.dart';
-import 'package:CAH/server.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen()
+      title: 'Splash Screen',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class SplashScreen extends StatefulWidget{
+class MyHomePage extends StatefulWidget {
+  
   @override
-  State<StatefulWidget> createState() => _SplashScreeenState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _SplashScreeenState extends State<SplashScreen>{
-Server server = Server();
-bool connState;
+class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    getConnState();
     super.initState();
-    //TIMER
-  }
-
-  void getConnState() async{
-    connState = await server.isConnected();
+    Timer(Duration(seconds: 3),()=>Navigator.pushReplacement(context,MaterialPageRoute(builder:(context) => SecondScreen())));
   }
 
   @override
   Widget build(BuildContext context) {
-    while (connState == false) {
-      getConnState();
-      return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              width: MediaQuery.of(context).size.width*.5,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*.03,
-              width: MediaQuery.of(context).size.width*.06,
-              child: CircularProgressIndicator(
-                value: null,
-                backgroundColor: Colors.black,
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*.02,
-            ),
-            Text(
-              'Waiting Internet Connection...',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                color: Colors.white,
-                decoration: TextDecoration.none
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    return Container(
+    color: Colors.white,
+    child: FlutterLogo(
+      size:MediaQuery.of(context).size.height)
+    );
+  }
+}
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title:Text("GeeksForGeeks")),
+      body: Center(
+        child:Text("Home page",textScaleFactor: 2,)
+      ),
+    );
+  }
+}
+
+/*
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:CAH/newMatch.dart';
+import 'package:CAH/join.dart';
+
+//fare SPLASH SCREEN
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       home: Home()
     );
-  } 
+  }
 }
 
 class Home extends StatelessWidget{
@@ -260,3 +255,4 @@ class _ButtonHome extends StatelessWidget{
     );
   }
 }
+*/

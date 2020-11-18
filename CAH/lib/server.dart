@@ -58,8 +58,10 @@ const int max_answers = 3;
       DataSnapshot dataSnapshot = await dbRoot.child('.info/connected').once();
       bool amIOnline = dataSnapshot.value;
       if (amIOnline == true) {
+          print(amIOnline);
           return amIOnline;
       } else {
+        print(amIOnline);
         return amIOnline;
       }
     }
