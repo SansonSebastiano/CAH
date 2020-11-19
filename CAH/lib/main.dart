@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:CAH/join.dart';
 import 'package:CAH/newMatch.dart';
 import 'package:CAH/server.dart';
@@ -7,34 +6,33 @@ import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return MaterialApp(
-      home: SplashScreen()
-    );
+    return MaterialApp(home: SplashScreen());
   }
 }
 
-class SplashScreen extends StatefulWidget{
+class SplashScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SplashScreeenState();
 }
 
-class _SplashScreeenState extends State<SplashScreen>{
-Server server = Server();
-bool connState;
+class _SplashScreeenState extends State<SplashScreen> {
+  Server server = Server();
+  bool connState;
 
   @override
   void initState() {
     getConnState();
     super.initState();
-    //TIMER
   }
 
-  void getConnState() async{
+  void getConnState() async {
     connState = await server.isConnected();
+    print("connection state : $connState");
+    setState(() {});
   }
 
   @override
@@ -47,11 +45,11 @@ bool connState;
           children: [
             Image.asset(
               'assets/images/logo.png',
-              width: MediaQuery.of(context).size.width*.5,
+              width: MediaQuery.of(context).size.width * .5,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height*.03,
-              width: MediaQuery.of(context).size.width*.06,
+              height: MediaQuery.of(context).size.height * .03,
+              width: MediaQuery.of(context).size.width * .06,
               child: CircularProgressIndicator(
                 value: null,
                 backgroundColor: Colors.black,
@@ -59,28 +57,25 @@ bool connState;
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height*.02,
+              height: MediaQuery.of(context).size.height * .02,
             ),
             Text(
               'Waiting Internet Connection...',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                color: Colors.white,
-                decoration: TextDecoration.none
-              ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: Colors.white,
+                  decoration: TextDecoration.none),
             ),
           ],
         ),
       );
-    }
-    return MaterialApp(
-      home: Home()
-    );
-  } 
+    } //while
+    return MaterialApp(home: Home());
+  }
 }
 
-class Home extends StatelessWidget{
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,100 +89,94 @@ class Home extends StatelessWidget{
                 padding: EdgeInsets.zero,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40.0),
-                      topRight: Radius.circular(40.0),
-                    )
-                  ),
-                  height: MediaQuery.of(context).size.height*.8,
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                        topRight: Radius.circular(40.0),
+                      )),
+                  height: MediaQuery.of(context).size.height * .8,
                   width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height*.1,
-                        ),
-                      _ButtonHome(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Join()));
-                        }, 
-                        label: 'Join', 
-                        icon: Icons.person
-                      ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       SizedBox(
-                          height: MediaQuery.of(context).size.height*.05,
+                        height: MediaQuery.of(context).size.height * .1,
                       ),
                       _ButtonHome(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => NewMatch()));
-                        }, 
-                        label: 'New Match', 
-                        icon: Icons.add
-                      ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Join()));
+                          },
+                          label: 'Join',
+                          icon: Icons.person),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height*.05,
+                        height: MediaQuery.of(context).size.height * .05,
                       ),
                       _ButtonHome(
-                        onPressed: (){
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedListSample()));
-                        }, 
-                        label: 'Rules', 
-                        icon: Icons.format_align_center
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewMatch()));
+                          },
+                          label: 'New Match',
+                          icon: Icons.add),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
                       ),
+                      _ButtonHome(
+                          onPressed: () {
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedListSample()));
+                          },
+                          label: 'Rules',
+                          icon: Icons.format_align_center),
                     ],
-                    ),
+                  ),
                   //),
-                ), 
+                ),
               ),
             ),
           ),
           Positioned.fill(
             child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*.1),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 5.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black,
-                        blurRadius: 5.0,
-                        spreadRadius: 0.5,
-                        //offset: Offset(2.0, 2.0)
-                      )
-                    ],
-                    color: Colors.black,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0)
-                    )
-                  ),
-                  height: MediaQuery.of(context).size.height*.22,
-                  width: MediaQuery.of(context).size.width*.7,
-                  child: Padding(
+                alignment: Alignment.topCenter,
+                child: Padding(
                     padding: EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                      top: 15,
-                      bottom: 5
-                    ),
-                    child: Text(
-                      'Cards Against Humanity',
-                      style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold
+                        top: MediaQuery.of(context).size.height * .1),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 5.0,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 5.0,
+                              spreadRadius: 0.5,
+                              //offset: Offset(2.0, 2.0)
+                            )
+                          ],
+                          color: Colors.black,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(20.0))),
+                      height: MediaQuery.of(context).size.height * .22,
+                      width: MediaQuery.of(context).size.width * .7,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 15, right: 15, top: 15, bottom: 5),
+                        child: Text(
+                          'Cards Against Humanity',
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-              )
-            ),
+                    ))),
           )
         ],
       ),
@@ -195,45 +184,38 @@ class Home extends StatelessWidget{
   }
 }
 
-class _ButtonHome extends StatelessWidget{
+class _ButtonHome extends StatelessWidget {
   final Function onPressed;
   final String label;
   final IconData icon;
 
-  _ButtonHome({@required this.onPressed, @required this.label, @required this.icon});
+  _ButtonHome(
+      {@required this.onPressed, @required this.label, @required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: MediaQuery.of(context).size.width*0.05,
-        right: MediaQuery.of(context).size.width*0.05,
+        left: MediaQuery.of(context).size.width * 0.05,
+        right: MediaQuery.of(context).size.width * 0.05,
       ),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(
-            color: Colors.white,
-            width: 0.0
-          ),
-          color:  Colors.black
-        ),
+            borderRadius: BorderRadius.circular(20.0),
+            border: Border.all(color: Colors.white, width: 0.0),
+            color: Colors.black),
         child: Container(
           margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height*0.008,
-            right: MediaQuery.of(context).size.width*0.01,
+            bottom: MediaQuery.of(context).size.height * 0.008,
+            right: MediaQuery.of(context).size.width * 0.01,
           ),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(8),
-              bottomRight: Radius.circular(20),
-              bottomLeft: Radius.circular(12)
-            ),
-            border: Border.all(
-              color: Colors.white
-            )
-          ),
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(8),
+                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(12)),
+              border: Border.all(color: Colors.white)),
           child: InkWell(
             onTap: () => onPressed(),
             child: ListTile(
@@ -247,14 +229,11 @@ class _ButtonHome extends StatelessWidget{
               ),
               title: Text(
                 label.toUpperCase(),
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15
-                ),
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             ),
-          ), 
+          ),
         ),
       ),
     );

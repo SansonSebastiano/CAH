@@ -34,12 +34,6 @@ class _SlavePlayerState extends State<SlavePlayer> {
     setState(() {});
   }
 
-  removeCard(index) {
-    setState(() {
-      player.answersList.remove(index);
-    });
-  }
-
   showSnackBar(context, answer, index) {
     Scaffold.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.black,
