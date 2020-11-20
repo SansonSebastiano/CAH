@@ -121,9 +121,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
                           countSentAns++;
                           Navigator.of(context).pop();
                         }, 
-                        onNoPressed: (){
-                          Navigator.of(context).pop();
-                        }
+                        onNoPressed: () => Navigator.of(context).pop(),
                       );
                     },
                   );

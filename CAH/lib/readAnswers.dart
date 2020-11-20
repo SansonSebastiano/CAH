@@ -15,6 +15,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
   Server server = Server();
   List<String> answersSent;
   int playerCounter;
+  int tappedAnswer = 0;
 
   @override
   void initState() {
@@ -45,35 +46,31 @@ class _ReadAnswersState extends State<ReadAnswers> {
           },
           child: Scaffold(
             body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height*.15,
-                      width: MediaQuery.of(context).size.width*.3,
-                      child: CircularProgressIndicator(
-                        value: null,
-                        backgroundColor: Colors.black,
-                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
-                      ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .15,
+                    width: MediaQuery.of(context).size.width * .3,
+                    child: CircularProgressIndicator(
+                      value: null,
+                      backgroundColor: Colors.black,
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.grey),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height*.1,
-                    ),
-                    Text(
-                      "Wait for each player to have answer...",
-
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .1,
+                  ),
+                  Text("Wait for each player to have answer...",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold, 
-                        fontSize: 20,
-                        decoration: TextDecoration.none
-                      )
-                    )
-                  ],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          decoration: TextDecoration.none))
+                ],
               ),
             ),
-          )
-        );
+          ));
     }
     return WillPopScope(
       onWillPop: () {
@@ -82,6 +79,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: ListView.builder(
+            //modify with animated list
             itemCount: answersSent.length,
             itemBuilder: (context, index) {
               return Container(
@@ -96,7 +94,22 @@ class _ReadAnswersState extends State<ReadAnswers> {
                       borderRadius: BorderRadius.circular(10.0)),
                   child: InkWell(
                     splashColor: Colors.black,
-                    onTap: () async {},
+                    onTap: () {
+                      if (tappedAnswer < 1) {
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return _YNAlertDialog(
+                              label: 'Is the winning answer?', 
+                              onYesPressed: () async{
+                                
+                              }, 
+                              onNoPressed: () => Navigator.of(context).pop(),
+                            );
+                          }, 
+                        );
+                      } else {}
+                    },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -104,9 +117,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
                           title: Text(
                             answersSent[index],
                             style: TextStyle(
-                              fontWeight: FontWeight.bold, 
-                              fontSize: 20
-                            ),
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                         )
                       ],
@@ -116,6 +127,67 @@ class _ReadAnswersState extends State<ReadAnswers> {
               );
             }),
       ),
+    );
+  }
+}
+
+class _YNAlertDialog extends StatelessWidget {
+  final String label;
+  final Function onYesPressed;
+  final Function onNoPressed;
+
+  _YNAlertDialog(
+      {@required this.label,
+      @required this.onYesPressed,
+      @required this.onNoPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.red,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: Icon(
+              Icons.warning,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      actions: [
+        RaisedButton(
+          onPressed: () => onYesPressed(),
+          color: Colors.white,
+          child: const Text(
+            'Yes',
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        RaisedButton(
+          onPressed: () => onNoPressed(),
+          color: Colors.white,
+          child: const Text(
+            'No',
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
     );
   }
 }

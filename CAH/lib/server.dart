@@ -52,7 +52,6 @@ String playerScore;
 List<String> playerAnswers;
 
 class Server {
-
   Server() {
     Firebase.initializeApp();
   }
@@ -370,17 +369,22 @@ class Server {
         .once();
 
     var value = snapshot.value;
-    var list = List<String>();
+    var ansList = List<String>();
+    var plrList = List<String>();
 
     if (value == null) {
       print('empty');
-      return list;
+      return ansList;
     } else {
       print('not empty');
-      for (var answer in value) {
-        list.add(answer.toString());
+      for (var tmp in value) {
+        var answer = tmp.toString().split('-').first;
+        var plrIndex = tmp.toString().split('-').last;
+
+        ansList.add(answer);
+        plrList.add(plrIndex);
       }
-      return list;
+      return ansList;
     }
   }
 
@@ -397,8 +401,12 @@ class Server {
         .child(player.index.toString())
         .child(path_answers_per_player)
         .reference();
-    String sendAns = player.answersList[index];
-    print('send ans $sendAns');
+    String sendAns = player.answersList[index] + "-" + player.index.toString();
+    print('send ans : $sendAns');
+
+    //  GET PLAYER WHO SEND SPECIFIC ANSWER
+    //var plrIndex = sendAns.split('-').last;
+    //print('plrIndex : $plrIndex');
 
     List<String> ansSentList = await loadAnswerSent(matchID);
     int counter = ansSentList.length;
