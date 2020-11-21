@@ -14,7 +14,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
   _ReadAnswersState({@required this.matchID});
 
   Server server = Server();
-  List<SentAnswers> answersSent;
+  List<SentAnswers> lstAnswersSent;
   int playerCounter;
   int tappedAnswer = 0;
 
@@ -26,7 +26,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
   }
 
   void getAnsSent() async {
-    answersSent = await server.loadAnswerSent(matchID);
+    lstAnswersSent = await server.loadAnswerSent(matchID);
     setState(() {});
   }
 
@@ -39,7 +39,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
 
   @override
   Widget build(BuildContext context) {
-    while (answersSent.length < playerCounter - 1) {
+    while (lstAnswersSent.length < playerCounter - 1) {
       getAnsSent();
       return WillPopScope(
           onWillPop: () {
@@ -81,7 +81,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
         backgroundColor: Colors.black,
         body: ListView.builder(
             //modify with animated list
-            itemCount: answersSent.length,
+            itemCount: lstAnswersSent.length,
             itemBuilder: (context, index) {
               return Container(
                 height: MediaQuery.of(context).size.height * .4,
@@ -101,22 +101,28 @@ class _ReadAnswersState extends State<ReadAnswers> {
                           context: context,
                           builder: (context) {
                             return _YNAlertDialog(
-                              label: 'Is the winning answer?', 
-                              onYesPressed: () async{
-                                
-                              }, 
+                              label: 'Is the winning answer?',
+                              onYesPressed: () async {
+                                await server.setWinner(
+                                    matchID, index, lstAnswersSent);
+
+                                tappedAnswer++;
+                                Navigator.of(context).pop();
+                              },
                               onNoPressed: () => Navigator.of(context).pop(),
                             );
-                          }, 
+                          },
                         );
-                      } else {}
+                      } else {
+                        
+                      }
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
                           title: Text(
-                            answersSent[index].answer,
+                            lstAnswersSent[index].answer,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -374,7 +373,7 @@ class Server {
     var value = snapshot.value;
     List<SentAnswers> list = List<SentAnswers>();
 
-    if (value == null) {    
+    if (value == null) {
       print('empty');
       return list;
     } else {
@@ -466,7 +465,21 @@ class Server {
     return snapshot != null;
   }
 
-  Future<void> setWinner() async{
+  Future<void> setWinner(
+      String matchID, int index, List<SentAnswers> list) async {
+    DatabaseReference scoreRef = dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_players)
+        .child(list[index].plrIndex.toString())
+        .child(path_score)
+        .reference();
 
+    player = await getPlayer(list[index].plrIndex.toString(), matchID);
+
+    scoreRef.set(player.index++);
   }
+
+  //TODO: PENSARE AL TERMINE DEL GIOCO
+
 }
