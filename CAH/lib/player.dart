@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:serializable/serializable.dart';
 
 class Player implements Serializable{
-  int index = 0;
+  int index;
   String name;
   List<String> answersList = List<String>();
   int score;

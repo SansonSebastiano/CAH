@@ -107,14 +107,23 @@ class _ReadAnswersState extends State<ReadAnswers> {
                                     matchID, index, lstAnswersSent);
 
                                 tappedAnswer++;
-                                Navigator.of(context).pop();
+                                
+                                //da mandare a 'slavePlayer.dart'
+                                //manca da passare thisPlayer, in teoria basta fare getPlayer
+                                //MaterialPageRoute(builder: (context) => Join()));
                               },
                               onNoPressed: () => Navigator.of(context).pop(),
                             );
                           },
                         );
-                      } else {
-                        
+                      } else {  //FORSE DA ELIMINARE
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return _AlertDialog(  //FORSE DA ELIMINARE
+                                label: 'You can decide only one answer!');
+                          },
+                        );
                       }
                     },
                     child: Column(
@@ -195,6 +204,40 @@ class _YNAlertDialog extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AlertDialog extends StatelessWidget {
+  final String label;
+
+  _AlertDialog({@required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.red,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: Icon(
+              Icons.warning,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

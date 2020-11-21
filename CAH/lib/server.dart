@@ -459,6 +459,7 @@ class Server {
     return newAnswer;
   }
 
+  //watch this
   Future<bool> pathFirebaseIsExists(DatabaseReference databaseReference) async {
     DataSnapshot snapshot = await databaseReference.once();
 
@@ -466,20 +467,24 @@ class Server {
   }
 
   Future<void> setWinner(
-      String matchID, int index, List<SentAnswers> list) async {
-    DatabaseReference scoreRef = dbRoot
+    String matchID, int index, List<SentAnswers> list) async {
+
+    player = await getPlayer(list[index].plrIndex.toString(), matchID);
+    //increase winner player score
+    dbRoot
         .child(path_matches)
         .child(matchID)
         .child(path_players)
         .child(list[index].plrIndex.toString())
         .child(path_score)
-        .reference();
-
-    player = await getPlayer(list[index].plrIndex.toString(), matchID);
-
-    scoreRef.set(player.index++);
+        .set(player.score+1);
+    //set master with winner player index
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_master)
+        .set(player.index);
   }
 
   //TODO: PENSARE AL TERMINE DEL GIOCO
-
 }
