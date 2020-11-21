@@ -22,16 +22,13 @@ class _MasterPlayerState extends State<MasterPlayer> {
 
   String question;
   Server server = Server();
-  List<String> sentAns = List<String>();
   int plrCounter;
-  //GlobalKey<RefreshIndicatorState> refreshKey;
 
   @override
   void initState() {
-    //refreshKey = GlobalKey<RefreshIndicatorState>();
     getQuestion();
     getNumPlayers();
-    getSentAns();
+
     super.initState();
   }
 
@@ -44,17 +41,6 @@ class _MasterPlayerState extends State<MasterPlayer> {
     var tmp = await server.getPlayersCounter(matchID);
     plrCounter = tmp.length;
     setState(() {});
-  }
-
-  void getSentAns() async {
-    sentAns = await server.loadAnswerSent(matchID);
-    setState(() {});
-  }
-
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(milliseconds: 250));
-    getSentAns();
-    return null;
   }
 
   @override

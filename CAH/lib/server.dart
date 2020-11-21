@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:CAH/player.dart';
+import 'package:CAH/sentAnswers.dart';
 
 //--------------------------------------------------------
 //                     Database's Paths
@@ -39,6 +41,7 @@ List<Player> listPlayers = List<Player>();
 List<String> listAnswersUsed = List<String>();
 List<String> listQuestionssUsed = List<String>();
 List<String> listMatchID = List<String>();
+List<SentAnswers> listSentAns = List<SentAnswers>();
 //counters
 int masterIndex;
 int lastPlayerIndex;
@@ -361,7 +364,7 @@ class Server {
       return completer.future;
     }*/
 
-  Future<List<String>> loadAnswerSent(String matchID) async {
+  Future<List<SentAnswers>> loadAnswerSent(String matchID) async {
     DataSnapshot snapshot = await dbRoot
         .child(path_matches)
         .child(matchID)
@@ -369,22 +372,24 @@ class Server {
         .once();
 
     var value = snapshot.value;
-    var ansList = List<String>();
-    var plrList = List<String>();
+    List<SentAnswers> list = List<SentAnswers>();
 
-    if (value == null) {
+    if (value == null) {    
       print('empty');
-      return ansList;
+      return list;
     } else {
       print('not empty');
       for (var tmp in value) {
         var answer = tmp.toString().split('-').first;
-        var plrIndex = tmp.toString().split('-').last;
+        var plrIndex = int.parse(tmp.toString().split('-').last);
 
-        ansList.add(answer);
-        plrList.add(plrIndex);
+        SentAnswers sentAns =
+            new SentAnswers(answer: answer, plrIndex: plrIndex);
+
+        list.add(sentAns);
+        //list.forEach((element) => print('lstAns : ${element.answer} | plrIndex : ${element.plrIndex}'));
       }
-      return ansList;
+      return list;
     }
   }
 
@@ -408,7 +413,7 @@ class Server {
     //var plrIndex = sendAns.split('-').last;
     //print('plrIndex : $plrIndex');
 
-    List<String> ansSentList = await loadAnswerSent(matchID);
+    List<SentAnswers> ansSentList = await loadAnswerSent(matchID);
     int counter = ansSentList.length;
     print('counter $counter');
 
@@ -459,5 +464,9 @@ class Server {
     DataSnapshot snapshot = await databaseReference.once();
 
     return snapshot != null;
+  }
+
+  Future<void> setWinner() async{
+
   }
 }

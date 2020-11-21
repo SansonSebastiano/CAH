@@ -1,3 +1,4 @@
+import 'package:CAH/sentAnswers.dart';
 import 'package:CAH/server.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
   _ReadAnswersState({@required this.matchID});
 
   Server server = Server();
-  List<String> answersSent;
+  List<SentAnswers> answersSent;
   int playerCounter;
   int tappedAnswer = 0;
 
@@ -115,7 +116,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
                       children: [
                         ListTile(
                           title: Text(
-                            answersSent[index],
+                            answersSent[index].answer,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
