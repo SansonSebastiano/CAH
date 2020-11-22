@@ -123,7 +123,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => WaitingRoom()));
+                                    builder: (context) => WaitingRoom(matchID: matchID,)));
                             },
                             onNoPressed: () => Navigator.of(context).pop(),
                           );

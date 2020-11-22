@@ -206,6 +206,7 @@ class Server {
         .child(path_players)
         .child(index)
         .reference();
+
     DataSnapshot name = await playerRef.child(path_player_name).once();
     DataSnapshot score = await playerRef.child(path_score).once();
 
@@ -467,8 +468,7 @@ class Server {
   }
 
   Future<void> setWinner(
-    String matchID, int index, List<SentAnswers> list) async {
-
+      String matchID, int index, List<SentAnswers> list) async {
     player = await getPlayer(list[index].plrIndex.toString(), matchID);
     //increase winner player score
     dbRoot
@@ -477,13 +477,31 @@ class Server {
         .child(path_players)
         .child(list[index].plrIndex.toString())
         .child(path_score)
-        .set(player.score+1);
+        .set(player.score + 1);
     //set master with winner player index
     dbRoot
         .child(path_matches)
         .child(matchID)
         .child(path_master)
         .set(player.index);
+  }
+
+  Future<int> getMasterID(String matchID) async {
+    DataSnapshot snapshot = await dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_master)
+        .once();
+
+    return snapshot.value;
+  }
+
+  Future<bool> checkWhoIsMaster(int masterID, List<String> playersList) async {
+    if (playersList.contains(masterID)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //TODO: PENSARE AL TERMINE DEL GIOCO
