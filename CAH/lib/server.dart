@@ -30,6 +30,7 @@ const String path_answers_per_player = 'answersPerPlayer';
 const String path_player_name = 'playerName';
 const String path_score = 'score';
 const String path_master = 'master';
+const String path_winnerSetted = "isWinSetted";
 //booleans
 bool playerAdded = false;
 bool masterPlayer = false;
@@ -192,8 +193,7 @@ class Server {
     await initAnswers(thisPlayerRef, matchID, masterPlayer);
 
     Player plr = await getPlayer(lastPlayerIndex.toString(), matchID);
-    print(
-        '[Server] player answer: ${plr.answersList} - score ${plr.score} - name ${plr.name} - index ${plr.index}');
+    print('[Server] player answer: ${plr.answersList} - score ${plr.score} - name ${plr.name} - index ${plr.index}');
 
     playerAdded = true;
     return plr;
@@ -225,6 +225,7 @@ class Server {
   }
 
   Future<void> setNewMatch(String masterName, String matchID) {
+    dbRoot.child(path_matches).child(matchID).child(path_winnerSetted).set('false');
     masterPlayer = true;
     return addPlayer(matchID, masterName, masterPlayer);
   }
@@ -383,8 +384,7 @@ class Server {
         var answer = tmp.toString().split('-').first;
         var plrIndex = int.parse(tmp.toString().split('-').last);
 
-        SentAnswers sentAns =
-            new SentAnswers(answer: answer, plrIndex: plrIndex);
+        SentAnswers sentAns = new SentAnswers(answer: answer, plrIndex: plrIndex);
 
         list.add(sentAns);
         //list.forEach((element) => print('lstAns : ${element.answer} | plrIndex : ${element.plrIndex}'));
@@ -484,6 +484,11 @@ class Server {
         .child(matchID)
         .child(path_master)
         .set(player.index);
+    //when winner is setted
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_winnerSetted).set('true');
   }
 
   Future<int> getMasterID(String matchID) async {
@@ -496,6 +501,13 @@ class Server {
     return snapshot.value;
   }
 
+  Future<String> isWinnerSetted(String matchID) async{
+    DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_winnerSetted).once();
+
+    return snapshot.value;
+  }
+
+  //PROBLEMA
   Future<bool> checkWhoIsMaster(int masterID, List<String> playersList) async {
     if (playersList.contains(masterID)) {
       return true;

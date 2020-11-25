@@ -119,11 +119,8 @@ class _SlavePlayerState extends State<SlavePlayer> {
 
                               countSentAns++;
 
-                              //Navigator.of(context).pop();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => WaitingRoom(matchID: matchID,)));
+                              Navigator.of(context).pop();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => WaitingRoom(matchID: matchID,)));
                             },
                             onNoPressed: () => Navigator.of(context).pop(),
                           );

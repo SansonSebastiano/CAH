@@ -2,6 +2,7 @@ import 'package:CAH/readAnswers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
+import 'package:timer_button/timer_button.dart';
 
 class MasterPlayer extends StatefulWidget {
   final String matchID;
@@ -100,17 +101,28 @@ class _MasterPlayerState extends State<MasterPlayer> {
                             ],
                           ),
                         ),
-                        //FARE UN SHOWDIALOG CON CIRCULAR PROGRESS CHE RIMANE IN ATTESA FINO A QUANDO TUTTI I GIOCATORI HANNO RISPOSTO
                         Align(
                           alignment: Alignment.bottomCenter,
-                          child: _ButtonHome(
+                          child: new TimerButton(
+                            label: 'Read the answers', 
+                            timeOutInSeconds: 60,
+                            disabledColor: Colors.grey,
+                            color: Colors.white,
+                            disabledTextStyle: new TextStyle(fontSize: 18.0, color: Colors.grey[600]),
+                            activeTextStyle: new TextStyle(fontSize: 20.0, color: Colors.black),
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID)));
+                            }, 
+                          ),
+                          /*_ButtonHome(
                               onPressed: () {
                                 //WARNING: se non ci sono altri giocatori da errore
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID)));
                               },
                               label: 'Read the answers',
-                              icon: Icons.trending_flat),
-                        ),
+                              icon: Icons.trending_flat
+                            ),*/
+                          ),
                       ],
                     ),
                   ),
@@ -162,7 +174,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
   }
 }
 
-class _ButtonHome extends StatelessWidget {
+/*class _ButtonHome extends StatelessWidget {
   final Function onPressed;
   final String label;
   final IconData icon;
@@ -211,7 +223,7 @@ class _ButtonHome extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 /*child: FlipView(
   front: Container(

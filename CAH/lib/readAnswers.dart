@@ -103,8 +103,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
                             return _YNAlertDialog(
                               label: 'Is the winning answer?',
                               onYesPressed: () async {
-                                await server.setWinner(
-                                    matchID, index, lstAnswersSent);
+                                await server.setWinner(matchID, index, lstAnswersSent);
 
                                 tappedAnswer++;
                                 

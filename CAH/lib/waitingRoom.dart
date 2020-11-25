@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:CAH/server.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +20,13 @@ class _WaitingRoomState extends State<WaitingRoom> {
   int masterID;
   List<String> playersList = List<String>();
   bool masterState;
+  String isWinSetted;
 
   @override
   void initState() {
     getMasterID();
     getPlayers();
-    getMasterState();
+    getMasterSetted();
     super.initState();
   }
 
@@ -45,9 +45,15 @@ class _WaitingRoomState extends State<WaitingRoom> {
     setState(() { });
   }
 
+  void getMasterSetted() async{
+    isWinSetted = await server.isWinnerSetted(matchID);
+    setState(() { });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (masterState == null) {
+    while (isWinSetted == 'false') {
+      getMasterSetted();
       return WillPopScope(
         onWillPop: () {
           return new Future(() => false);
@@ -81,12 +87,27 @@ class _WaitingRoomState extends State<WaitingRoom> {
           ),
         )
       );
+    } 
+    print('object1 : $masterState');
+    getMasterState();
+    print('object2 : $masterState');
+    if (masterState == true) {
+      return Container(
+        child: Text(
+          'master : $masterState',
+        ),
+      );
+      //vai a MasterPlayer
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => WaitingRoom(matchID: matchID,)));
     } else {
-      if (masterState == true) {
-        //vai a MasterPlayer
-      } else {
-        //RITORNA a SlavePlayer
-      }
+      
+      //Navigator.of(context).pop();
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => WaitingRoom(matchID: matchID,)));
+      return Container(
+        child: Text(
+          'master : $masterState',
+        ),
+      );
     }
   }
 }
