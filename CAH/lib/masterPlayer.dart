@@ -105,7 +105,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
                           alignment: Alignment.bottomCenter,
                           child: new TimerButton(
                             label: 'Read the answers', 
-                            timeOutInSeconds: 60,
+                            timeOutInSeconds: 10,               //da aumentare in seguito
                             disabledColor: Colors.grey,
                             color: Colors.white,
                             disabledTextStyle: new TextStyle(fontSize: 18.0, color: Colors.grey[600]),

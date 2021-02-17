@@ -12,6 +12,7 @@ import 'package:CAH/sentAnswers.dart';
 //--------------------------------------------------------
 
 const int max_answers = 3;
+const int max_questions = 1;
 
 //root
 DatabaseReference dbRoot = FirebaseDatabase.instance.reference();
@@ -225,7 +226,11 @@ class Server {
   }
 
   Future<void> setNewMatch(String masterName, String matchID) {
-    dbRoot.child(path_matches).child(matchID).child(path_winnerSetted).set('false');
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_winnerSetted)
+        .set('false');
     masterPlayer = true;
     return addPlayer(matchID, masterName, masterPlayer);
   }
@@ -384,7 +389,8 @@ class Server {
         var answer = tmp.toString().split('-').first;
         var plrIndex = int.parse(tmp.toString().split('-').last);
 
-        SentAnswers sentAns = new SentAnswers(answer: answer, plrIndex: plrIndex);
+        SentAnswers sentAns =
+            new SentAnswers(answer: answer, plrIndex: plrIndex);
 
         list.add(sentAns);
         //list.forEach((element) => print('lstAns : ${element.answer} | plrIndex : ${element.plrIndex}'));
@@ -488,7 +494,8 @@ class Server {
     dbRoot
         .child(path_matches)
         .child(matchID)
-        .child(path_winnerSetted).set('true');
+        .child(path_winnerSetted)
+        .set('true');
   }
 
   Future<int> getMasterID(String matchID) async {
@@ -501,19 +508,23 @@ class Server {
     return snapshot.value;
   }
 
-  Future<String> isWinnerSetted(String matchID) async{
-    DataSnapshot snapshot = await dbRoot.child(path_matches).child(matchID).child(path_winnerSetted).once();
+  Future<bool> isWinnerSetted(String matchID) async {
+    DataSnapshot snapshot = await dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_winnerSetted)
+        .once();
 
-    return snapshot.value;
-  }
-
-  //PROBLEMA
-  Future<bool> checkWhoIsMaster(int masterID, List<String> playersList) async {
-    if (playersList.contains(masterID)) {
+    String tmp = snapshot.value;
+    if (tmp == "true") {
       return true;
     } else {
       return false;
     }
+  }
+
+  bool checkWhoIsMaster(int masterID, List<String> playersList) {
+    return playersList.contains(masterID.toString());
   }
 
   //TODO: PENSARE AL TERMINE DEL GIOCO

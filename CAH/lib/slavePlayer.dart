@@ -7,17 +7,19 @@ import 'package:CAH/player.dart';
 class SlavePlayer extends StatefulWidget {
   final Player player;
   final String matchID;
+
   const SlavePlayer({Key key, @required this.player, @required this.matchID})
       : super(key: key);
 
   @override
-  _SlavePlayerState createState() => _SlavePlayerState(matchID: matchID);
+  _SlavePlayerState createState() => _SlavePlayerState(matchID: matchID, player: player);
 }
 
 class _SlavePlayerState extends State<SlavePlayer> {
   final String matchID;
+  final Player player;
 
-  _SlavePlayerState({@required this.matchID});
+  _SlavePlayerState({@required this.matchID, @required this.player});
 
   List<String> answersList;
   Server server = Server();
@@ -46,41 +48,44 @@ class _SlavePlayerState extends State<SlavePlayer> {
   Widget build(BuildContext context) {
     if (answersList == null) {
       return WillPopScope(
-          onWillPop: () {
-            return new Future(() => false);
-          },
-          child: Scaffold(
-            body: Center(
-              child: SizedBox(
-                height: 150,
-                width: 150,
-                child: CircularProgressIndicator(
-                  value: null,
-                  backgroundColor: Colors.black,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
-                ),
+        onWillPop: () {
+          return new Future(() => false);
+        },
+        child: Scaffold(
+          body: Center(
+            child: SizedBox(
+              height: 150,
+              width: 150,
+              child: CircularProgressIndicator(
+                value: null,
+                backgroundColor: Colors.black,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
               ),
             ),
-          ));
+          ),
+        )
+      );
     } else {
       return WillPopScope(
-          onWillPop: () {
-            return new Future(() => false);
-          },
-          child: Scaffold(
-              backgroundColor: Colors.black,
-              body: AnimatedList(
-                  key: _listKey,
-                  initialItemCount: answersList.length,
-                  itemBuilder: (context, index, animation) {
-                    return _buildItem(
-                        context, answersList[index], animation, index);
-                  })));
+        onWillPop: () {
+          return new Future(() => false);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: AnimatedList(
+            key: _listKey,
+            initialItemCount: answersList.length,
+            itemBuilder: (context, index, animation) {
+              return _buildItem(
+                  context, answersList[index], animation, index);
+            }
+          )
+        )
+      );
     }
   }
 
-  Widget _buildItem(BuildContext context, String item,
-      Animation<double> animation, int index) {
+  Widget _buildItem(BuildContext context, String item, Animation<double> animation, int index) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: SizeTransition(
@@ -120,7 +125,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
                               countSentAns++;
 
                               Navigator.of(context).pop();
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => WaitingRoom(matchID: matchID,)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => WaitingRoom(matchID: matchID, player: this.player,)));
                             },
                             onNoPressed: () => Navigator.of(context).pop(),
                           );
@@ -130,8 +135,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
                       return showDialog(
                         context: context,
                         builder: (context) {
-                          return _AlertDialog(
-                              label: 'You can send only one question!');
+                          return _AlertDialog(label: 'You can send only one question!');
                         },
                       );
                     }

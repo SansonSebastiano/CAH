@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
 
+//INTRODURRE ALERT DIALOG CON MATCH ID DA COMUNICARE AGL'ALTRI GIOCATORI
+
 class NewMatch extends StatefulWidget{
   @override
   _NewMatchState createState() => _NewMatchState();

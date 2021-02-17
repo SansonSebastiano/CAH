@@ -42,9 +42,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
     while (lstAnswersSent.length < playerCounter - 1) {
       getAnsSent();
       return WillPopScope(
-          onWillPop: () {
-            return new Future(() => false);
-          },
+          onWillPop: () { return new Future(() => false); },
           child: Scaffold(
             body: Center(
               child: Column(
@@ -108,8 +106,8 @@ class _ReadAnswersState extends State<ReadAnswers> {
                                 tappedAnswer++;
                                 
                                 //da mandare a 'slavePlayer.dart'
-                                //manca da passare thisPlayer, in teoria basta fare getPlayer
-                                //MaterialPageRoute(builder: (context) => Join()));
+                                //manca da passare this.player, in teoria basta fare getPlayer
+                                //Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(isFirst: false, matchID: matchID)));
                               },
                               onNoPressed: () => Navigator.of(context).pop(),
                             );
