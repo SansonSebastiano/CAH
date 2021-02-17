@@ -1,3 +1,4 @@
+import 'package:CAH/player.dart';
 import 'package:CAH/readAnswers.dart';
 import 'package:flutter/material.dart';
 
@@ -7,19 +8,27 @@ import 'package:timer_button/timer_button.dart';
 class MasterPlayer extends StatefulWidget {
   final String matchID;
   final bool isFirst;
-  const MasterPlayer({Key key, @required this.matchID, @required this.isFirst})
+  final Player player;
+
+  const MasterPlayer(
+      {Key key,
+      @required this.matchID,
+      @required this.isFirst,
+      @required this.player})
       : super(key: key);
 
   @override
   _MasterPlayerState createState() =>
-      _MasterPlayerState(matchID: matchID, isFirst: isFirst);
+      _MasterPlayerState(matchID: matchID, isFirst: isFirst, player: player);
 }
 
 class _MasterPlayerState extends State<MasterPlayer> {
   final String matchID;
   final bool isFirst;
+  final Player player;
 
-  _MasterPlayerState({@required this.matchID, @required this.isFirst});
+  _MasterPlayerState(
+      {@required this.matchID, @required this.isFirst, @required this.player});
 
   String question;
   Server server = Server();
@@ -27,10 +36,16 @@ class _MasterPlayerState extends State<MasterPlayer> {
 
   @override
   void initState() {
+    initWinnerState();
     getQuestion();
     getNumPlayers();
 
     super.initState();
+  }
+
+  void initWinnerState() async {
+    await server.initWinnerState(matchID);
+    setState(() {});
   }
 
   void getQuestion() async {
@@ -88,7 +103,8 @@ class _MasterPlayerState extends State<MasterPlayer> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                height: MediaQuery.of(context).size.height *.20,
+                                height:
+                                    MediaQuery.of(context).size.height * .20,
                                 width: MediaQuery.of(context).size.width * 1,
                               ),
                               Text(
@@ -103,26 +119,28 @@ class _MasterPlayerState extends State<MasterPlayer> {
                         ),
                         Align(
                           alignment: Alignment.bottomCenter,
-                          child: new TimerButton(
-                            label: 'Read the answers', 
-                            timeOutInSeconds: 10,               //da aumentare in seguito
+                          child: /*new TimerButton(
+                            label: 'Read the answers',
+                            timeOutInSeconds: 10, //da aumentare in seguito
                             disabledColor: Colors.grey,
                             color: Colors.white,
-                            disabledTextStyle: new TextStyle(fontSize: 18.0, color: Colors.grey[600]),
-                            activeTextStyle: new TextStyle(fontSize: 20.0, color: Colors.black),
+                            disabledTextStyle: new TextStyle(
+                                fontSize: 18.0, color: Colors.grey[600]),
+                            activeTextStyle: new TextStyle(
+                                fontSize: 20.0, color: Colors.black),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID)));
-                            }, 
-                          ),
-                          /*_ButtonHome(
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID, player: player)));
+                            },
+                          ),*/
+                          _ButtonHome(
                               onPressed: () {
                                 //WARNING: se non ci sono altri giocatori da errore
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID)));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID, player: player,)));
                               },
                               label: 'Read the answers',
                               icon: Icons.trending_flat
-                            ),*/
-                          ),
+                            ),
+                        ),
                       ],
                     ),
                   ),
@@ -174,7 +192,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
   }
 }
 
-/*class _ButtonHome extends StatelessWidget {
+class _ButtonHome extends StatelessWidget {
   final Function onPressed;
   final String label;
   final IconData icon;
@@ -223,7 +241,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
       ),
     );
   }
-}*/
+}
 
 /*child: FlipView(
   front: Container(

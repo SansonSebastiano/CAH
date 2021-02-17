@@ -10,10 +10,12 @@ class WaitingRoom extends StatefulWidget {
   final String matchID;
   final Player player;
 
-  const WaitingRoom({Key key, @required this.matchID, @required this.player}) : super(key: key);
+  const WaitingRoom({Key key, @required this.matchID, @required this.player})
+      : super(key: key);
 
   @override
-  _WaitingRoomState createState() => _WaitingRoomState(matchID: matchID, player: player);
+  _WaitingRoomState createState() =>
+      _WaitingRoomState(matchID: matchID, player: player);
 }
 
 class _WaitingRoomState extends State<WaitingRoom> {
@@ -40,6 +42,10 @@ class _WaitingRoomState extends State<WaitingRoom> {
     return winState;
   }
 
+  Future<void> initSentAnswers() async {
+    await server.initSentAnswers(matchID);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -52,17 +58,84 @@ class _WaitingRoomState extends State<WaitingRoom> {
             builder: (context, snapshot) {
               if (snapshot.hasData && winState) {
                 if (masterState) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(isFirst: false, matchID: matchID)));
+                  initSentAnswers();
+                  Future.delayed(Duration(seconds: 5), () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MasterPlayer(
+                                isFirst: false,
+                                matchID: matchID,
+                                player: player)));
+                  });
+
                   return Scaffold(
                     body: Center(
-                      child: Text("sei un master"),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .15,
+                            width: MediaQuery.of(context).size.width * .3,
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.black,
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Colors.grey),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .1,
+                          ),
+                          Text(
+                            'Drawing a new question for you...',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 } else {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer(matchID: this.matchID, player: this.player,)));
+                  Future.delayed(Duration(seconds: 5), () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SlavePlayer(
+                                  matchID: this.matchID,
+                                  player: this.player,
+                                )));
+                  });
+
                   return Scaffold(
                     body: Center(
-                      child: Text("sei un slave"),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .15,
+                            width: MediaQuery.of(context).size.width * .3,
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.black,
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Colors.grey),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .1,
+                          ),
+                          Text(
+                            'Waiting for new round...',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }
@@ -73,14 +146,17 @@ class _WaitingRoomState extends State<WaitingRoom> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height* .15,
-                          width: MediaQuery.of(context).size.width* .3,
+                          height: MediaQuery.of(context).size.height * .15,
+                          width: MediaQuery.of(context).size.width * .3,
                           child: CircularProgressIndicator(
                             backgroundColor: Colors.black,
-                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(Colors.grey),
                           ),
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height* .1,),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .1,
+                        ),
                         Text(
                           'Waiting...',
                           style: TextStyle(

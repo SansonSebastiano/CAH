@@ -1,17 +1,25 @@
 import 'package:CAH/sentAnswers.dart';
 import 'package:CAH/server.dart';
+import 'package:CAH/slavePlayer.dart';
 import 'package:flutter/material.dart';
+
+import 'player.dart';
 
 class ReadAnswers extends StatefulWidget {
   final String matchID;
-  const ReadAnswers({Key key, @required this.matchID}) : super(key: key);
+  final Player player;
+
+  const ReadAnswers({Key key, @required this.matchID, @required this.player})
+      : super(key: key);
   @override
-  _ReadAnswersState createState() => _ReadAnswersState(matchID: matchID);
+  _ReadAnswersState createState() => _ReadAnswersState(matchID: matchID, player: player);
 }
 
 class _ReadAnswersState extends State<ReadAnswers> {
   final String matchID;
-  _ReadAnswersState({@required this.matchID});
+  final Player player;
+
+  _ReadAnswersState({@required this.matchID, @required this.player});
 
   Server server = Server();
   List<SentAnswers> lstAnswersSent;
@@ -42,7 +50,9 @@ class _ReadAnswersState extends State<ReadAnswers> {
     while (lstAnswersSent.length < playerCounter - 1) {
       getAnsSent();
       return WillPopScope(
-          onWillPop: () { return new Future(() => false); },
+          onWillPop: () {
+            return new Future(() => false);
+          },
           child: Scaffold(
             body: Center(
               child: Column(
@@ -101,10 +111,12 @@ class _ReadAnswersState extends State<ReadAnswers> {
                             return _YNAlertDialog(
                               label: 'Is the winning answer?',
                               onYesPressed: () async {
-                                await server.setWinner(matchID, index, lstAnswersSent);
+                                await server.setWinner(
+                                    matchID, index, lstAnswersSent);
 
                                 tappedAnswer++;
-                                
+
+                                Navigator.push(context ,MaterialPageRoute(builder: (context) => SlavePlayer(matchID: matchID, player: player)));
                                 //da mandare a 'slavePlayer.dart'
                                 //manca da passare this.player, in teoria basta fare getPlayer
                                 //Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(isFirst: false, matchID: matchID)));
@@ -113,11 +125,13 @@ class _ReadAnswersState extends State<ReadAnswers> {
                             );
                           },
                         );
-                      } else {  //FORSE DA ELIMINARE
+                      } else {
+                        //FORSE DA ELIMINARE
                         return showDialog(
                           context: context,
                           builder: (context) {
-                            return _AlertDialog(  //FORSE DA ELIMINARE
+                            return _AlertDialog(
+                                //FORSE DA ELIMINARE
                                 label: 'You can decide only one answer!');
                           },
                         );

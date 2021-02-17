@@ -161,10 +161,8 @@ class Server {
     return result;
   }
 
-  Future<Player> addPlayer(
-      String matchID, String playerName, bool isFirst) async {
-    DatabaseReference thisMatchRef =
-        dbRoot.child(path_matches).child(matchID).reference();
+  Future<Player> addPlayer(String matchID, String playerName, bool isFirst) async {
+    DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference();
 
     if (isFirst == true) {
       lastPlayerIndex = 0;
@@ -194,7 +192,7 @@ class Server {
     await initAnswers(thisPlayerRef, matchID, masterPlayer);
 
     Player plr = await getPlayer(lastPlayerIndex.toString(), matchID);
-    print('[Server] player answer: ${plr.answersList} - score ${plr.score} - name ${plr.name} - index ${plr.index}');
+    print('[Server] player answer: ${plr.answersList} - score: ${plr.score} - name: ${plr.name} - index: ${plr.index}');
 
     playerAdded = true;
     return plr;
@@ -223,16 +221,6 @@ class Server {
         answersList: playerAnswers);
 
     return player;
-  }
-
-  Future<void> setNewMatch(String masterName, String matchID) {
-    dbRoot
-        .child(path_matches)
-        .child(matchID)
-        .child(path_winnerSetted)
-        .set('false');
-    masterPlayer = true;
-    return addPlayer(matchID, masterName, masterPlayer);
   }
 
   Future<String> initQuestions(String matchID, bool isFirst) async {
@@ -271,8 +259,7 @@ class Server {
     return newQuestion;
   }
 
-  Future<void> initAnswers(
-      DatabaseReference dbRef, String matchID, bool isFirst) async {
+  Future<void> initAnswers(DatabaseReference dbRef, String matchID, bool isFirst) async {
     DatabaseReference ansUsedRef = dbRoot
         .child(path_matches)
         .child(matchID)
@@ -427,6 +414,13 @@ class Server {
     delThisAnswer.child(index.toString()).remove();
   }
 
+  Future<void> initSentAnswers(String matchID) async{
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_answersSent).remove();
+  }
+
   Future<String> refillAnswer(Player player, String matchID) async {
     DatabaseReference ansUsedRef = dbRoot
         .child(path_matches)
@@ -521,6 +515,14 @@ class Server {
     } else {
       return false;
     }
+  }
+
+  Future<void> initWinnerState(String matchID) async{
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_winnerSetted)
+        .set('false');
   }
 
   bool checkWhoIsMaster(int masterID, List<String> playersList) {

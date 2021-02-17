@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:CAH/masterPlayer.dart';
+import 'package:CAH/player.dart';
 import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
@@ -145,8 +146,10 @@ class _NewMatchState extends State<NewMatch>{
                           _Button(
                           onPressed: () async{
                             if (_nameInput.text.toString().isNotEmpty) {
-                              await server.setNewMatch(_nameInput.text.toString(), newID.toString());
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true,)));
+                              Player player = await server.addPlayer(newID.toString(), _nameInput.text.toString(), true);
+                              await server.initWinnerState(newID.toString());
+
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true, player: player, )));
                             }
                             else {
                               return showDialog(
