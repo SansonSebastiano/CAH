@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:CAH/join.dart';
 import 'package:CAH/newMatch.dart';
 import 'package:CAH/server.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,8 +49,8 @@ class _SplashScreeenState extends State<SplashScreen> {
               width: MediaQuery.of(context).size.width * .5,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * .03,
-              width: MediaQuery.of(context).size.width * .06,
+              height: MediaQuery.of(context).size.height * .04,
+              width: MediaQuery.of(context).size.width * .08,
               child: CircularProgressIndicator(
                 value: null,
                 backgroundColor: Colors.black,
@@ -57,7 +58,7 @@ class _SplashScreeenState extends State<SplashScreen> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * .02,
+              height: MediaQuery.of(context).size.height * .04,
             ),
             Text(
               'Waiting Internet Connection...',

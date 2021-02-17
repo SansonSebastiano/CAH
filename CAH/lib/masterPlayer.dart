@@ -3,7 +3,6 @@ import 'package:CAH/readAnswers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:CAH/server.dart';
-import 'package:timer_button/timer_button.dart';
 
 class MasterPlayer extends StatefulWidget {
   final String matchID;
