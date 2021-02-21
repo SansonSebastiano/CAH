@@ -1,3 +1,4 @@
+import 'package:CAH/cardFlip.dart';
 import 'package:CAH/sentAnswers.dart';
 import 'package:CAH/server.dart';
 import 'package:CAH/slavePlayer.dart';
@@ -8,18 +9,22 @@ import 'player.dart';
 class ReadAnswers extends StatefulWidget {
   final String matchID;
   final Player player;
+  final String question;
 
-  const ReadAnswers({Key key, @required this.matchID, @required this.player})
+  const ReadAnswers({Key key, @required this.matchID, @required this.player, @required this.question})
       : super(key: key);
   @override
-  _ReadAnswersState createState() => _ReadAnswersState(matchID: matchID, player: player);
+  _ReadAnswersState createState() =>
+      _ReadAnswersState(matchID: matchID, player: player, question: question);
 }
 
 class _ReadAnswersState extends State<ReadAnswers> {
   final String matchID;
   final Player player;
+  final String question;
 
-  _ReadAnswersState({@required this.matchID, @required this.player});
+  _ReadAnswersState(
+      {@required this.matchID, @required this.player, @required this.question});
 
   Server server = Server();
   List<SentAnswers> lstAnswersSent;
@@ -50,44 +55,93 @@ class _ReadAnswersState extends State<ReadAnswers> {
     while (lstAnswersSent.length < playerCounter - 1) {
       getAnsSent();
       return WillPopScope(
-          onWillPop: () {
-            return new Future(() => false);
-          },
-          child: Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .15,
-                    width: MediaQuery.of(context).size.width * .3,
-                    child: CircularProgressIndicator(
-                      value: null,
-                      backgroundColor: Colors.black,
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.grey),
-                    ),
+        onWillPop: () {
+          return new Future(() => false);
+        },
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .15,
+                  width: MediaQuery.of(context).size.width * .3,
+                  child: CircularProgressIndicator(
+                    value: null,
+                    backgroundColor: Colors.black,
+                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .1,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .1,
+                ),
+                Text(
+                  "Wait for each player to have answer...",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    decoration: TextDecoration.none,
                   ),
-                  Text("Wait for each player to have answer...",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          decoration: TextDecoration.none))
-                ],
-              ),
+                ),
+              ],
             ),
-          ));
-    }
+          ),
+        ),
+      );
+    } //while
     return WillPopScope(
       onWillPop: () {
         return new Future(() => false);
       },
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: ListView.builder(
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.height * .02,
+                  top: MediaQuery.of(context).size.height * .02,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).padding.top),
+                  child: Text(
+                    question,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: lstAnswersSent.length,
+                  itemBuilder: (context, index) {
+                    return CardFlip(
+                      text: lstAnswersSent[index].answer,
+                      onTap: (){},
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(height: MediaQuery.of(context).size.height*.1),      
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/*
+  ListView.builder(
             //modify with animated list
             itemCount: lstAnswersSent.length,
             itemBuilder: (context, index) {
@@ -153,10 +207,7 @@ class _ReadAnswersState extends State<ReadAnswers> {
                 ),
               );
             }),
-      ),
-    );
-  }
-}
+ 
 
 class _YNAlertDialog extends StatelessWidget {
   final String label;
@@ -252,3 +303,4 @@ class _AlertDialog extends StatelessWidget {
     );
   }
 }
+*/
