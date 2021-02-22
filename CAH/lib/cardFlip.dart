@@ -120,7 +120,52 @@ class _CardState extends State<Cards> {
       @required String text,
       @required double fontSize,
       Function onTap}) {
+    return CustomCard(
+      text: text,
+      fontSize: fontSize,
+      onTap: onTap,
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget{
+  final String text;
+  final Function onTap;
+  final double fontSize;
+
+  CustomCard({@required this.text, @required this.onTap, @required this.fontSize});
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
+      child: Container(
+        height: MediaQuery.of(context).size.height * .55,
+        width: MediaQuery.of(context).size.width * .9,
+        child: Card(
+          elevation: 10.0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: InkWell(
+            onTap: onTap,
+            splashColor: Colors.black54,
+            child: Container(
+              margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.width * .04,
+                left: MediaQuery.of(context).size.height * .02,
+              ),
+              child: Text(
+                text,
+                style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+/*Center(
       key: key,
       child: Container(
         height: MediaQuery.of(context).size.height * .55,
@@ -145,6 +190,4 @@ class _CardState extends State<Cards> {
           ),
         ),
       ),
-    );
-  }
-}
+    ); */

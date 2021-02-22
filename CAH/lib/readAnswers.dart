@@ -1,4 +1,5 @@
 import 'package:CAH/cardFlip.dart';
+import 'package:CAH/custom_AlertDialog.dart';
 import 'package:CAH/sentAnswers.dart';
 import 'package:CAH/server.dart';
 import 'package:CAH/slavePlayer.dart';
@@ -67,7 +68,6 @@ class _ReadAnswersState extends State<ReadAnswers> {
                   height: MediaQuery.of(context).size.height * .15,
                   width: MediaQuery.of(context).size.width * .3,
                   child: CircularProgressIndicator(
-                    value: null,
                     backgroundColor: Colors.black,
                     valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
                   ),
@@ -125,7 +125,25 @@ class _ReadAnswersState extends State<ReadAnswers> {
                   itemBuilder: (context, index) {
                     return CardFlip(
                       text: lstAnswersSent[index].answer,
-                      onTap: (){},
+                      onTap: (){
+                        if (tappedAnswer < 1) {
+                          return showDialog(
+                            context: context,
+                            builder: (context) {
+                              return YNAlertWindow(
+                                text: 'Is the winning answer?',
+                                onYesPressed: () async{
+                                  await server.setWinner(matchID, index, lstAnswersSent);
+                                  tappedAnswer++;
+
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer(matchID: matchID, player: player,)));
+                                },
+                                onNoPressed: () => Navigator.of(context).pop(),
+                              );
+                            }
+                          );
+                        }
+                      },
                     );
                   },
                 ),

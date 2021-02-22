@@ -75,7 +75,7 @@ class YNAlertWindow extends StatelessWidget {
               textColor: Colors.white,
               borderColor: Colors.white,
               onTapColor: Colors.white54,
-              onPressed: onYesPressed(),
+              onPressed: () => onYesPressed(),
             ),
 
             SizedBox(width: MediaQuery.of(context).size.width*.025,),
@@ -85,7 +85,7 @@ class YNAlertWindow extends StatelessWidget {
               textColor: Colors.white,
               borderColor: Colors.white,
               onTapColor: Colors.white54,
-              onPressed: onNoPressed(),
+              onPressed:() => onNoPressed(),
             ),
           ],
         ),       

@@ -1,5 +1,4 @@
 
-import 'package:CAH/cardFlip.dart';
 import 'package:CAH/custom_AlertDialog.dart';
 import 'package:CAH/player.dart';
 import 'package:CAH/readAnswers.dart';
@@ -83,14 +82,19 @@ class _MasterPlayerState extends State<MasterPlayer> {
       icon: Container(),
       splashColor: Colors.black54,
       onPressed: () {
-        YNAlertWindow(
-          text: "Are your sure that all players are joined?",
-          onYesPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID, player: player, question: question,)));
-          },
-          onNoPressed: (){
-            Navigator.of(context).pop();
-          },
+        return showDialog(
+          context: context,
+          builder: (context){
+            return YNAlertWindow(
+              text: "Are your sure that all players are joined?",
+              onYesPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ReadAnswers(matchID: matchID, player: player, question: question,)));
+              },
+              onNoPressed: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
         );
       },
     );
