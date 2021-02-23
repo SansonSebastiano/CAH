@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CardFlip extends StatelessWidget {
-  final String text;
-  final Function onTap;
+  // Parameters required
+  final String text;      //text displayed in front side of card
+  final Function onTap;   //function launched on pressed
 
   CardFlip({@required this.text, @required this.onTap});
 
@@ -17,23 +18,25 @@ class CardFlip extends StatelessWidget {
 
 class Cards extends StatefulWidget {
   Cards({Key key, @required this.text, @required this.onTap}) : super(key: key);
-
-  final String text;
-  final Function onTap;
+  // Parameters required
+  final String text;      //text displayed in front side of card
+  final Function onTap;   //function launched on pressed
 
   @override
   _CardState createState() => _CardState(text: text, onTap: onTap);
 }
 
 class _CardState extends State<Cards> {
-  final String text;
-  final Function onTap;
+  // Parameters required
+  final String text;      //text displayed in front side of card
+  final Function onTap;   //function launched on pressed
 
   _CardState({@required this.text, @required this.onTap});
 
-  bool _showFrontSide;
-  bool _flipXAxis;
+  bool _showFrontSide;    // true for display front side of a card
+  bool _flipXAxis;        // for determine the axis rotation, true for Y axis rotation
 
+  //init value
   @override
   void initState() {
     super.initState();
@@ -53,21 +56,25 @@ class _CardState extends State<Cards> {
     });
   }*/
 
+  // for swicth card side
   void _switchCard() {
     setState(() {
       _showFrontSide = !_showFrontSide;
     });
   }
 
+  // build animation
   Widget _buildFlipAnimation(String text, Function onTap) {
-
     return GestureDetector(
       onTap: _switchCard,
       child: AnimatedSwitcher(
+        // Animation duration
         duration: Duration(seconds: 1),
+        // call flip transition
         transitionBuilder: __transitionBuilder,
         layoutBuilder: (widget, list) => Stack(children: [widget, ...list]),
         child: _showFrontSide ? _buildRear() : _buildFront(text, onTap),
+        // The animation curve to use when transitioning in a new [child].
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
       ),
@@ -75,6 +82,7 @@ class _CardState extends State<Cards> {
 
   }
 
+  //build flip transition
   Widget __transitionBuilder(Widget widget, Animation<double> animation) {
     final rotateAnim = Tween(begin: pi, end: 0.0).animate(animation);
 
@@ -98,6 +106,7 @@ class _CardState extends State<Cards> {
     );
   }
 
+  // Front side card layout
   Widget _buildFront(String text, Function onTap) {
     return __buildLayout(
       key: ValueKey(true), 
@@ -107,6 +116,7 @@ class _CardState extends State<Cards> {
     );
   }
 
+  // Rear side card layout
   Widget _buildRear() {
     return __buildLayout(
       key: ValueKey(false),
@@ -115,6 +125,7 @@ class _CardState extends State<Cards> {
     );
   }
 
+  // general custom card layout
   Widget __buildLayout(
       {Key key,
       @required String text,
@@ -128,10 +139,12 @@ class _CardState extends State<Cards> {
   }
 }
 
+// Custom Card layout
 class CustomCard extends StatelessWidget{
-  final String text;
-  final Function onTap;
-  final double fontSize;
+  // Parameters required
+  final String text;      //text displayed in front side of card
+  final Function onTap;   //function launched on pressed
+  final double fontSize;  //size of text
 
   CustomCard({@required this.text, @required this.onTap, @required this.fontSize});
 

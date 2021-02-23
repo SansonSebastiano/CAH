@@ -2,11 +2,14 @@ import 'package:CAH/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+// custom Alert Dialog 
 class WindowDialog extends StatelessWidget {
-  final String text;
+  // Parameters required
+  final String text;    //text displayed on Alert Dialog
 
   WindowDialog({@required this.text});
 
+  // Build Custom AD layout
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -35,13 +38,16 @@ class WindowDialog extends StatelessWidget {
   }
 }
 
+// Custom alert dialog with Y/N options
 class YNAlertWindow extends StatelessWidget {
-  final String text;
-  final Function onYesPressed;
-  final Function onNoPressed;
+  // Parameters required
+  final String text;            //text displayed on Alert Dialog
+  final Function onYesPressed;  //function launched on yes button pressed
+  final Function onNoPressed;   //function launched on no button pressed
 
   YNAlertWindow({@required this.text, @required this.onYesPressed, @required this.onNoPressed});
 
+  //build custom AD with Y/N options layout
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -60,6 +66,7 @@ class YNAlertWindow extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
+          
           Text(
             text,
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
@@ -70,6 +77,7 @@ class YNAlertWindow extends StatelessWidget {
       actions: [
         Row(
           children: <Widget>[
+            // YES Alert Dialog Button
             ADButton(
               text: 'Yes',
               textColor: Colors.white,
@@ -79,8 +87,9 @@ class YNAlertWindow extends StatelessWidget {
             ),
 
             SizedBox(width: MediaQuery.of(context).size.width*.025,),
-
-             ADButton(
+            
+            // NO Alert Dialog Button
+            ADButton(
               text: 'No',
               textColor: Colors.white,
               borderColor: Colors.white,
@@ -89,7 +98,7 @@ class YNAlertWindow extends StatelessWidget {
             ),
           ],
         ),       
-      ],
+      ],  
     );
   }
 }

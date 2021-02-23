@@ -150,8 +150,7 @@ class _WaitingRoomState extends State<WaitingRoom> {
                           width: MediaQuery.of(context).size.width * .3,
                           child: CircularProgressIndicator(
                             backgroundColor: Colors.black,
-                            valueColor:
-                                new AlwaysStoppedAnimation<Color>(Colors.grey),
+                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
                           ),
                         ),
                         SizedBox(

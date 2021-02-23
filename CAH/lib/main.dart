@@ -1,4 +1,4 @@
-import 'package:CAH/custom_AlertDialog.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
@@ -12,7 +12,9 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Lock orientation in portrait mode
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    // Splash Screen layout
     return MaterialApp(home: SplashScreen());
   }
 }
@@ -23,46 +25,54 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreeenState extends State<SplashScreen> {
-  Server server = Server();
-  bool connState = false;
+  Server server = Server();         //init server
+  bool connState = false;           //for verify connection to FireBase
 
+  //first thing before [build]
   @override
   void initState() {
     getConnState();
     super.initState();
   }
 
+  //get connection state of a client device
   void getConnState() async {
     connState = await server.isConnected();
     print("connection state : $connState");
     setState(() {});
   }
 
+  //build Splash Screen layout
   @override
   Widget build(BuildContext context) {
+    //if there is no internet connection display this
     if (!connState) {
-      getConnState();
+      getConnState();     //get connection state of a client device
       
       return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
             Image.asset(
               'assets/images/logo.png',
               width: MediaQuery.of(context).size.width * .5,
             ),
+
             SizedBox(
               height: MediaQuery.of(context).size.height * .04,
               width: MediaQuery.of(context).size.width * .08,
+              //Circular Progress Indicator
               child: CircularProgressIndicator(
-                value: null,
                 backgroundColor: Colors.black,
                 valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ),
+
             SizedBox(
               height: MediaQuery.of(context).size.height * .04,
             ),
+
             Text(
               'Waiting Internet Connection...',
               style: TextStyle(
@@ -74,7 +84,9 @@ class _SplashScreeenState extends State<SplashScreen> {
           ],
         ),
       );
+    //else display this
     }else{
+      //Home layout
       return MaterialApp(home: Home());
     } 
   }
@@ -84,6 +96,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // display Home page layout with Custom NavBar at bottom
       home: NavigationHome(),
     );
   }
@@ -97,33 +110,52 @@ class NavigationHome extends StatefulWidget {
 }
 
 class _NavigationHomeState extends State<NavigationHome> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;     // select which widget's page display
 
+  // List of Widgets contained inside the NavBar 
   static List<Widget> _widgetOptions = <Widget>[
+    // Join's page
     Join(),
-
+    // New Match's page
     NewMatch(),
-
-    YNAlertWindow(text: 'test', onYesPressed: (){}, onNoPressed: (){},),
-    //CardFlip(text: 'Test', onTap: (){},),
+    // Rules' page, NOW TESTING
+    Container(),
   ];
 
+  //set selected widget on -index- position
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  //build Home page layout
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       extendBody: true,
+      /*appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          'Cards Against Humanity',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 25.0,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),*/
       body: SafeArea(
         child: Center(
+          // Widget selection to display
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
       ),
+      //build custom navbar
       bottomNavigationBar: FloatingNavbar(
 
         onTap: _onItemTapped,
@@ -137,6 +169,7 @@ class _NavigationHomeState extends State<NavigationHome> {
         /*iconSize: 30,
         fontSize: 15,*/
 
+        //NavBar items
         items: <FloatingNavbarItem>[
           FloatingNavbarItem(
             icon: Icons.login,

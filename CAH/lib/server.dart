@@ -65,6 +65,22 @@ class Server {
     return dataSnapshot.value as bool;
   }
 
+  Future<void> deleteMatch(String matchID) async {
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .remove();
+  }
+
+  Future<void> leaveGame(String matchID, int indexPlayer) async {
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_players)
+        .child(indexPlayer.toString())
+        .remove();
+  }
+
   /*Future<List<String>> loadElements(DatabaseReference elementsPath) async{
 
     }*/
@@ -161,8 +177,10 @@ class Server {
     return result;
   }
 
-  Future<Player> addPlayer(String matchID, String playerName, bool isFirst) async {
-    DatabaseReference thisMatchRef = dbRoot.child(path_matches).child(matchID).reference();
+  Future<Player> addPlayer(
+      String matchID, String playerName, bool isFirst) async {
+    DatabaseReference thisMatchRef =
+        dbRoot.child(path_matches).child(matchID).reference();
 
     if (isFirst == true) {
       lastPlayerIndex = 0;
@@ -192,7 +210,8 @@ class Server {
     await initAnswers(thisPlayerRef, matchID, masterPlayer);
 
     Player plr = await getPlayer(lastPlayerIndex.toString(), matchID);
-    print('[Server] player answer: ${plr.answersList} - score: ${plr.score} - name: ${plr.name} - index: ${plr.index}');
+    print(
+        '[Server] player answer: ${plr.answersList} - score: ${plr.score} - name: ${plr.name} - index: ${plr.index}');
 
     playerAdded = true;
     return plr;
@@ -259,7 +278,8 @@ class Server {
     return newQuestion;
   }
 
-  Future<void> initAnswers(DatabaseReference dbRef, String matchID, bool isFirst) async {
+  Future<void> initAnswers(
+      DatabaseReference dbRef, String matchID, bool isFirst) async {
     DatabaseReference ansUsedRef = dbRoot
         .child(path_matches)
         .child(matchID)
@@ -414,11 +434,8 @@ class Server {
     delThisAnswer.child(index.toString()).remove();
   }
 
-  Future<void> initSentAnswers(String matchID) async{
-    dbRoot
-        .child(path_matches)
-        .child(matchID)
-        .child(path_answersSent).remove();
+  Future<void> initSentAnswers(String matchID) async {
+    dbRoot.child(path_matches).child(matchID).child(path_answersSent).remove();
   }
 
   Future<String> refillAnswer(Player player, String matchID) async {
@@ -517,7 +534,7 @@ class Server {
     }
   }
 
-  Future<void> initWinnerState(String matchID) async{
+  Future<void> initWinnerState(String matchID) async {
     dbRoot
         .child(path_matches)
         .child(matchID)

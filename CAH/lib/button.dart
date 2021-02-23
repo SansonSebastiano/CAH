@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// Custom Button layout
 class Button extends StatelessWidget {
-  final String text;
-  final Function onPressed;
-  final Color textColor;
-  final Color borderColor;
-  final Color onTapColor;
+  //parameters required
+  final String text;            //button's label
+  final Function onPressed;     //function launched on pressed
+  final Color textColor;        //color of text
+  final Color borderColor;      //color of border button
+  final Color onTapColor;       //button color on tap
 
   Button({@required this.text, @required this.onPressed, @required this.textColor, @required this.borderColor, @required this.onTapColor});
 
@@ -38,12 +40,14 @@ class Button extends StatelessWidget {
   }
 }
 
+// Custom Button for AlertDialog layout
 class ADButton extends StatelessWidget{
-  final String text;
-  final Function onPressed;
-  final Color textColor;
-  final Color borderColor;
-  final Color onTapColor;
+  //parameters required
+  final String text;            //button's label
+  final Function onPressed;     //function launched on pressed
+  final Color textColor;        //color of text
+  final Color borderColor;      //color of border button
+  final Color onTapColor;       //button color on tap
 
   ADButton({@required this.text, @required this.onPressed, @required this.textColor, @required this.borderColor, @required this.onTapColor});
 

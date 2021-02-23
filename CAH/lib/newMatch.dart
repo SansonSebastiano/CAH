@@ -8,46 +8,50 @@ import 'package:CAH/server.dart';
 import 'Button.dart';
 import 'package:CAH/textBox.dart';
 
-//INTRODURRE ALERT DIALOG CON MATCH ID DA COMUNICARE AGL'ALTRI GIOCATORI
-
 class NewMatch extends StatefulWidget{
   @override
   _NewMatchState createState() => _NewMatchState();
 }
 
 class _NewMatchState extends State<NewMatch>{
-  int newID;
-  Server server = Server();
+  int newID;                  //get ID for create new game istance
+  Server server = Server();   // init server istance
 
   @override
   void initState(){
+    // get new ID with delay
     Future.delayed(Duration(milliseconds: 500), (){
       getNewID();
     });
     super.initState();
   }
-
+  // get new ID randomly
   void getNewID() async{
     newID = await checkNewID();
     setState(() {});
   }
-
+  // check if new ID randomly generated exist
   Future<int> checkNewID() async{
+    // generate a new random ID
     var rndNum = 10000 + new Random().nextInt(99999 - 10000);
+    // check if rndNum exist
     var flag = await server.checkMatchID(rndNum.toString());
-
+    // if exist
     if (flag == true) {
+      //re-generated a new ID
       return checkNewID();
+
+      //else, if not exist
     } else {
+      //return this ID
       return rndNum;
     }
   }
-
+  // init controller for name input
   final _nameInput = TextEditingController();
 
-  //Important: Call dispose of the TextEditingController when you’ve finished using it. 
+  //IMPORTANT: Call dispose of the TextEditingController when you’ve finished using it. 
   //This ensures that you discard any resources used by the object.
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -55,10 +59,12 @@ class _NewMatchState extends State<NewMatch>{
     super.dispose();
   
   }  
-
+  // build New Match page layout
   @override
   Widget build(BuildContext context) {
+    //if ID is not generated
     if(newID == null){
+      // display this
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -84,7 +90,9 @@ class _NewMatchState extends State<NewMatch>{
           )
         ],
       );
+      //else, if is generated
     }else{  
+      // display New Match Page
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -107,7 +115,7 @@ class _NewMatchState extends State<NewMatch>{
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
+                    // display new Match ID generated
                     TextBox(
                       label: 'Match ID',
                       wid: ListTile(
@@ -126,7 +134,7 @@ class _NewMatchState extends State<NewMatch>{
                   SizedBox(
                     height: MediaQuery.of(context).size.height*.05,
                   ),
-
+                  // Name text field
                   TextBox(
                     label: 'Name',
                     wid: TextField(
@@ -146,24 +154,27 @@ class _NewMatchState extends State<NewMatch>{
                   SizedBox(
                     height: MediaQuery.of(context).size.height*.05,
                   ),
-
-                  //DISABLE BUTTON WHEN THE FIELDS ARE EMPTY
+                  //to create new game
                   Button(
                     text: 'Start', 
                     textColor: Colors.black,
                     borderColor: Colors.black,
                     onTapColor: Colors.black54,
                     onPressed: () async{
+                      // if name text field is not empty
                       if (_nameInput.text.toString().isNotEmpty) {
+                        //create new match and add this FIRST player
                         Player player = await server.addPlayer(newID.toString(), _nameInput.text.toString(), true);
+                        // set this bool var 'false' on FireBase
                         await server.initWinnerState(newID.toString());
-
+                        // with delay go to Master Player page
                         Future.delayed(Duration(milliseconds: 300), (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true, player: player, )));
                         });
                       }
+                      //else, if is empty
                       else {
-                        //SOSTITURE CON WINDOWDIALOG
+                        // display custom AD
                         return showDialog(
                           context: context,
                           builder: (context) {

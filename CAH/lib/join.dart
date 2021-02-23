@@ -17,8 +17,9 @@ class Join extends StatefulWidget {
 class _JoinState extends State<Join> {
   Server server = Server();
 
-  final _nameInput = TextEditingController();
-  final _idInput = TextEditingController();
+  // Controller for text field
+  final _nameInput = TextEditingController();   //get name in input
+  final _idInput = TextEditingController();     //get ID in input
 
   @override
   void dispose() {
@@ -28,21 +29,12 @@ class _JoinState extends State<Join> {
     super.dispose();
   }
 
+  // Login form layout
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        /*Text(
-          'Cards \nAgainst \nHumanity',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold
-          ),
-          textAlign: TextAlign.center,
-        ),*/
-
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width*.04,
@@ -63,6 +55,7 @@ class _JoinState extends State<Join> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
 
+                  // Custom text field layout for get a Match ID in input
                   TextBox(
                     label: 'Match ID',
                     wid: TextField(
@@ -85,6 +78,7 @@ class _JoinState extends State<Join> {
                     height: MediaQuery.of(context).size.height*.05,
                   ),
 
+                  // Custom text field layout for get a player name in input
                   TextBox(
                     label: 'Name',
                     wid: TextField(
@@ -105,22 +99,29 @@ class _JoinState extends State<Join> {
                   ),
 
                   //DISABLE BUTTON WHEN THE FIELDS ARE EMPTY
+                  // To confirm and join in the game
                   Button(
                     text: 'join',
                     textColor: Colors.black,
                     borderColor: Colors.black,
                     onTapColor: Colors.black54,
                     onPressed: () async {
-                      
+                      // Check if ID and Name text field are empty
+                      // if not not empty
                       if (_idInput.text.toString().isNotEmpty && _nameInput.text.toString().isNotEmpty) {
+                        // Check if the Match ID in input existing
                         var flag = await server.checkMatchID(_idInput.text.toString());
-                        if (flag == true &&_idInput.text.toString() != '0') {
+                        // if not exist and no equal to zero
+                        if (flag == true && _idInput.text.toString() != '0') {
+                          // Set new player in current Match path on FireBase
                           Player player = await server.addPlayer(_idInput.text.toString(), _nameInput.text.toString(), false);
-
+                          // With delay go to Slave Player Page
                           Future.delayed(Duration(milliseconds: 300), (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => SlavePlayer(player: player, matchID:_idInput.text.toString())));
                           });
+                          // else, if Match ID in input exist and equal to zero
                         } else {
+                          // Display Custom Alert Dialog
                           return showDialog(
                             context: context,
                             builder: (context) {
@@ -128,7 +129,9 @@ class _JoinState extends State<Join> {
                             },
                           );
                         }
+                        // else, if one of the text field is empty
                       } else {
+                        // Display Custom Alert Dialog
                         return showDialog(
                           context: context,
                           builder: (context) {
