@@ -34,7 +34,7 @@ class _SlavePlayerState extends State<SlavePlayer> {
   @override
   void initState() {
     getAllAnswersList();
-    getLGState();
+   // getLG();
     super.initState();
   }
 
@@ -43,16 +43,17 @@ class _SlavePlayerState extends State<SlavePlayer> {
     setState(() {});
   }
 
-  Future<bool> getLGState() async {
+  //NON FUNZIONA
+  Future<bool> getLG() async {
     lg = await server.getLeaveGameState(matchID);
-    if (lg) {
-      print('LG : $lg');
-      return lg;
+    if (!lg) {
+      lg = await server.getLeaveGameState(matchID);
+      print("LG 1 : $lg");
+      return getLG();
     } else {
-      print('LG : $lg');
-      getLGState();
+      print("LG 2 : $lg");
+      return lg;
     }
-    return lg;
   }
 
   void exit() async {
@@ -80,13 +81,11 @@ class _SlavePlayerState extends State<SlavePlayer> {
         )
       );
     } else {
-      return FutureBuilder(         //NON FUNZIONA
-        future: getLGState(),
+      //return FutureBuilder(
+        //future: getLG(),
         // ignore: missing_return
-        builder: (context, snapshot) {
-          if (snapshot.hasData && lg) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-          } else {
+        //builder: (context, snapshot) {
+          //if (!lg) {
             return WillPopScope(
               onWillPop: () {
                 return new Future(() => false);
@@ -106,9 +105,12 @@ class _SlavePlayerState extends State<SlavePlayer> {
                 ),
               )
             );
-          }
-        },
-      );
+          //} else {
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+         // }
+        //},
+      //);
+      
     } //else
   }
 
@@ -150,18 +152,18 @@ class _SlavePlayerState extends State<SlavePlayer> {
       ),
       onPressed: () {
         return showDialog(
-            context: context,
-            builder: (context) {
-              return YNAlertWindow(
-                text: 'Are you sure to leave the game?',
-                onNoPressed: () => Navigator.of(context).pop(),
-                onYesPressed: () {
-                  exit();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyApp()));
-                },
-              );
-            });
+          context: context,
+          builder: (context) {
+            return YNAlertWindow(
+              text: 'Are you sure to leave the game?',
+              onNoPressed: () => Navigator.of(context).pop(),
+              onYesPressed: () {
+                exit();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+              },
+            );
+          }
+        );
       },
     );
   }

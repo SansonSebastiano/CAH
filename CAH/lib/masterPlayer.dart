@@ -1,4 +1,5 @@
 
+import 'package:CAH/button.dart';
 import 'package:CAH/custom_AlertDialog.dart';
 import 'package:CAH/main.dart';
 import 'package:CAH/player.dart';
@@ -118,6 +119,59 @@ class _MasterPlayerState extends State<MasterPlayer> {
     );
   }
 
+  Widget _getAppBar(){
+    return AppBar(
+      backgroundColor: Colors.white,
+      automaticallyImplyLeading: false,
+      centerTitle: true,
+      title: Text(
+        'Match: $matchID',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      //for close the current match
+      leading: Tooltip(
+        message: 'Close this match game',
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 15.0,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.red[400],
+          borderRadius: BorderRadius.all(Radius.circular(10.0))
+        ),
+        child: CustomIconButton(
+          icons: Icons.close,
+          iconColor: Colors.red,
+          onTapColor: Colors.red[300],
+          onPressed: (){
+            return showDialog(
+              context: context,
+              builder: (context) {
+                return YNAlertWindow(
+                  text: 'Are you sure to close this game?',
+                  onNoPressed: () => Navigator.of(context).pop(),
+                  onYesPressed: () {
+                    setLeaveGame();
+
+                    Future.delayed(Duration(seconds: 3), () {
+                      deleteThisMatch();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                    });
+                  },
+                );
+              }
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   // build Master Player page
   @override
   Widget build(BuildContext context) {
@@ -129,57 +183,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
       child: Scaffold(
         backgroundColor: Colors.black,
         // display current match ID on app bar
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(
-            'Match: $matchID',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          //for close the current match
-          leading: GestureDetector(
-            child: Tooltip(
-              message: 'Close this match game',
-              textStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.red[400],
-                borderRadius: BorderRadius.all(Radius.circular(10.0))
-              ),
-              child: Icon(
-                Icons.close,
-                color: Colors.black,
-              ),
-            ),
-            onTap: () {
-              return showDialog(
-                context: context,
-                builder: (context) {
-                  return YNAlertWindow(
-                    text: 'Are you sure to close this game?',
-                    onNoPressed: () => Navigator.of(context).pop(),
-                    onYesPressed: () {
-                      setLeaveGame();
-
-                      Future.delayed(Duration(seconds: 3), () {
-                        deleteThisMatch();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                      });
-                    },
-                  );
-                }
-              );
-            },
-          ),
-        ),
+        appBar: _getAppBar(),
         floatingActionButton: _getFAB(),
         body: SafeArea(
           child: Column(
@@ -204,28 +208,6 @@ class _MasterPlayerState extends State<MasterPlayer> {
                   ),
                 ),
               ),
-
-              /*Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <CardFlip>[
-                    CardFlip(
-                      text: 'Test 1', 
-                      onTap: (){},
-                    ),
-                    CardFlip(
-                      text: 'Test 2', 
-                      onTap: null,
-                    ),
-                    CardFlip(
-                      text: 'Test 3', 
-                      onTap: null,
-                    ),
-                  ],
-                ),
-              ),
-              
-              SizedBox(height: MediaQuery.of(context).size.height*.1),*/
             ],
           ),
         ),

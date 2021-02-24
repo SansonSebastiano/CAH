@@ -82,7 +82,7 @@ class Server {
         .child(path_leaveGame)
         .once();
 
-    if (snapshot.value.toString == 'true') {
+    if (snapshot.value.toString() == 'true') {
       return true;
     } else {
       return false;
