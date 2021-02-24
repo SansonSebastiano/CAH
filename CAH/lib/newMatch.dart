@@ -166,7 +166,7 @@ class _NewMatchState extends State<NewMatch>{
                         //create new match and add this FIRST player
                         Player player = await server.addPlayer(newID.toString(), _nameInput.text.toString(), true);
                         // set this bool var 'false' on FireBase
-                        await server.initWinnerState(newID.toString());
+                        await server.initMatchGame(newID.toString());
                         // with delay go to Master Player page
                         Future.delayed(Duration(milliseconds: 300), (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true, player: player, )));

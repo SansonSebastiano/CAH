@@ -59,7 +59,7 @@ class _WaitingRoomState extends State<WaitingRoom> {
               if (snapshot.hasData && winState) {
                 if (masterState) {
                   initSentAnswers();
-                  Future.delayed(Duration(seconds: 5), () {
+                  Future.delayed(Duration(seconds: 3), () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -99,7 +99,7 @@ class _WaitingRoomState extends State<WaitingRoom> {
                     ),
                   );
                 } else {
-                  Future.delayed(Duration(seconds: 5), () {
+                  Future.delayed(Duration(seconds: 3), () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -38,15 +38,15 @@ class _MasterPlayerState extends State<MasterPlayer> {
 
   @override
   void initState() {
-    initWinnerState();
+    initGame();
     getQuestion();
     getNumPlayers();
 
     super.initState();
   }
   // set a bool var in FireBase
-  void initWinnerState() async {
-    await server.initWinnerState(matchID);
+  void initGame() async {
+    await server.initMatchGame(matchID);
     setState(() {});
   }
   // get question randomly from FireBase
@@ -60,8 +60,12 @@ class _MasterPlayerState extends State<MasterPlayer> {
     setState(() {});
   }
 
-  Future <void> deleteThisMatch() async{
+  void deleteThisMatch() async{
     await server.deleteMatch(matchID);
+  }
+
+  void setLeaveGame() async{
+    await server.setTrueLeaveGame(matchID);
   }
 
   // custom Floating Action BUtton
@@ -138,6 +142,7 @@ class _MasterPlayerState extends State<MasterPlayer> {
             ),
             textAlign: TextAlign.center,
           ),
+          //for close the current match
           leading: GestureDetector(
             child: Tooltip(
               message: 'Close this match game',
@@ -162,8 +167,12 @@ class _MasterPlayerState extends State<MasterPlayer> {
                     text: 'Are you sure to close this game?',
                     onNoPressed: () => Navigator.of(context).pop(),
                     onYesPressed: () {
-                      deleteThisMatch();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                      setLeaveGame();
+
+                      Future.delayed(Duration(seconds: 3), () {
+                        deleteThisMatch();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                      });
                     },
                   );
                 }

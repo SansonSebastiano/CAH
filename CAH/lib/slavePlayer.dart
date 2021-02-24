@@ -29,10 +29,12 @@ class _SlavePlayerState extends State<SlavePlayer> {
   Server server = Server();
   int countSentAns = 0;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  bool lg;
 
   @override
   void initState() {
     getAllAnswersList();
+    getLGState();
     super.initState();
   }
 
@@ -41,38 +43,77 @@ class _SlavePlayerState extends State<SlavePlayer> {
     setState(() {});
   }
 
-  Future<void> exit() async {
-    await server.leaveGame(matchID, player.index);
+  Future<bool> getLGState() async {
+    lg = await server.getLeaveGameState(matchID);
+    if (lg) {
+      print('LG : $lg');
+      return lg;
+    } else {
+      print('LG : $lg');
+      getLGState();
+    }
+    return lg;
   }
 
-  /*showSnackBar(context, answer, index) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      backgroundColor: Colors.black,
-      content: Text('$answer sent'),
-    ));
-  }*/
+  void exit() async {
+    await server.leaveGame(matchID, player.index);
+  }
 
   @override
   Widget build(BuildContext context) {
     if (answersList == null) {
       return WillPopScope(
-          onWillPop: () {
-            return new Future(() => false);
-          },
-          child: Scaffold(
-            body: Center(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * .15,
-                width: MediaQuery.of(context).size.width * .3,
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.black,
-                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
-                ),
+        onWillPop: () {
+          return new Future(() => false);
+        },
+        child: Scaffold(
+          body: Center(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * .15,
+              width: MediaQuery.of(context).size.width * .3,
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.black,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey),
               ),
             ),
-          ));
+          ),
+        )
+      );
     } else {
-      return WillPopScope(
+      return FutureBuilder(         //NON FUNZIONA
+        future: getLGState(),
+        // ignore: missing_return
+        builder: (context, snapshot) {
+          if (snapshot.hasData && lg) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+          } else {
+            return WillPopScope(
+              onWillPop: () {
+                return new Future(() => false);
+              },
+              child: Scaffold(
+                backgroundColor: Colors.black,
+                floatingActionButton: fab(),
+                appBar: appBar(),
+                body: SafeArea(
+                  child: AnimatedList(
+                    key: _listKey,
+                    initialItemCount: answersList.length,
+                    itemBuilder: (context, index, animation) {
+                      return _buildList(context, answersList[index], animation, index);
+                    },
+                  ),
+                ),
+              )
+            );
+          }
+        },
+      );
+    } //else
+  }
+
+  /*
+    return WillPopScope(
           onWillPop: () {
             return new Future(() => false);
           },
@@ -90,9 +131,9 @@ class _SlavePlayerState extends State<SlavePlayer> {
                 },
               ),
             ),
-          ));
-    }
-  }
+          )
+        );
+   */
 
   Widget fab() {
     return FloatingActionButton.extended(
@@ -109,19 +150,18 @@ class _SlavePlayerState extends State<SlavePlayer> {
       ),
       onPressed: () {
         return showDialog(
-          context: context,
-          builder: (context) {
-            return YNAlertWindow(
-              text: 'Are you sure to leave the game?',
-              onNoPressed: () => Navigator.of(context).pop(),
-              onYesPressed: () {
-                exit();
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => MyApp()));
-              },
-            );
-          }
-        );
+            context: context,
+            builder: (context) {
+              return YNAlertWindow(
+                text: 'Are you sure to leave the game?',
+                onNoPressed: () => Navigator.of(context).pop(),
+                onYesPressed: () {
+                  exit();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyApp()));
+                },
+              );
+            });
       },
     );
   }

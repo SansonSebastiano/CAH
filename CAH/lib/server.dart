@@ -11,7 +11,7 @@ import 'package:CAH/sentAnswers.dart';
 //                     Database's Paths
 //--------------------------------------------------------
 
-const int max_answers = 3;
+const int max_answers = 10;
 const int max_questions = 1;
 
 //root
@@ -31,7 +31,9 @@ const String path_answers_per_player = 'answersPerPlayer';
 const String path_player_name = 'playerName';
 const String path_score = 'score';
 const String path_master = 'master';
+//match manager
 const String path_winnerSetted = "isWinSetted";
+const String path_leaveGame = "leaveGame";
 //booleans
 bool playerAdded = false;
 bool masterPlayer = false;
@@ -66,10 +68,25 @@ class Server {
   }
 
   Future<void> deleteMatch(String matchID) async {
-    dbRoot
+    dbRoot.child(path_matches).child(matchID).remove();
+  }
+
+  Future<void> setTrueLeaveGame(String matchID) async {
+    dbRoot.child(path_matches).child(matchID).child(path_leaveGame).set('true');
+  }
+
+  Future<bool> getLeaveGameState(String matchID) async {
+    DataSnapshot snapshot = await dbRoot
         .child(path_matches)
         .child(matchID)
-        .remove();
+        .child(path_leaveGame)
+        .once();
+
+    if (snapshot.value.toString == 'true') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> leaveGame(String matchID, int indexPlayer) async {
@@ -534,11 +551,17 @@ class Server {
     }
   }
 
-  Future<void> initWinnerState(String matchID) async {
+  Future<void> initMatchGame(String matchID) async {
     dbRoot
         .child(path_matches)
         .child(matchID)
         .child(path_winnerSetted)
+        .set('false');
+
+    dbRoot
+        .child(path_matches)
+        .child(matchID)
+        .child(path_leaveGame)
         .set('false');
   }
 
