@@ -1,10 +1,11 @@
-import 'package:CAH/cardFlip.dart';
-import 'package:CAH/custom_AlertDialog.dart';
-import 'package:CAH/sentAnswers.dart';
-import 'package:CAH/server.dart';
-import 'package:CAH/slavePlayer.dart';
 import 'package:flutter/material.dart';
+
+import 'cardFlip.dart';
+import 'custom_AlertDialog.dart';
 import 'player.dart';
+import 'sentAnswers.dart';
+import 'server.dart';
+import 'slavePlayer.dart';
 
 //DA COMMENTARE
 class ReadAnswers extends StatefulWidget {

@@ -1,10 +1,9 @@
-import 'package:CAH/player.dart';
-import 'package:CAH/server.dart';
-import 'package:CAH/slavePlayer.dart';
 import 'package:flutter/material.dart';
 
 import 'masterPlayer.dart';
+import 'player.dart';
 import 'server.dart';
+import 'slavePlayer.dart';
 
 class WaitingRoom extends StatefulWidget {
   final String matchID;

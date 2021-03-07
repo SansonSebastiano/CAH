@@ -1,13 +1,12 @@
-import 'package:CAH/player.dart';
-import 'package:CAH/server.dart';
-import 'package:CAH/slavePlayer.dart';
-import 'package:CAH/textBox.dart';
-import 'package:CAH/custom_AlertDialog.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'Button.dart';
+import 'custom_AlertDialog.dart';
+import 'player.dart';
+import 'server.dart';
+import 'slavePlayer.dart';
+import 'textBox.dart';
 
 class Join extends StatefulWidget {
   @override

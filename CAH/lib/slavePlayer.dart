@@ -1,11 +1,11 @@
-import 'package:CAH/cardFlip.dart';
-import 'package:CAH/custom_AlertDialog.dart';
-import 'package:CAH/main.dart';
-import 'package:CAH/waitingRoom.dart';
 import 'package:flutter/material.dart';
 
-import 'package:CAH/server.dart';
-import 'package:CAH/player.dart';
+import 'cardFlip.dart';
+import 'custom_AlertDialog.dart';
+import 'main.dart';
+import 'player.dart';
+import 'server.dart';
+import 'waitingRoom.dart';
 
 class SlavePlayer extends StatefulWidget {
   final Player player;

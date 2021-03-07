@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-import 'package:CAH/player.dart';
-import 'package:CAH/sentAnswers.dart';
+import 'player.dart';
+import 'sentAnswers.dart';
+
+
 
 //--------------------------------------------------------
 //                     Database's Paths

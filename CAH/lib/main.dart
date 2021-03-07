@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 
-import 'package:CAH/join.dart';
-import 'package:CAH/newMatch.dart';
-import 'package:CAH/server.dart';
+import 'join.dart';
+import 'newMatch.dart';
+import 'server.dart';
 
 void main() => runApp(MyApp());
 

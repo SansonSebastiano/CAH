@@ -17,9 +17,45 @@ class Button extends StatelessWidget {
       @required this.borderColor,
       @required this.onTapColor});
 
+  /*final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+      side: BorderSide(
+        color: Colors.black,
+        width: 2,
+      ),
+    ),
+    minimumSize: Size(MediaQuery.of(context).size.width * .8, MediaQuery.of(context).size.height * .065)
+  );*/
+
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
+      onPressed: () => onPressed(),
+      child: Text(
+        text.toUpperCase(),
+        style: TextStyle(
+          color: textColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          side: BorderSide(
+            color: Colors.black,
+            width: 2,
+          ),
+        ),
+        minimumSize: Size(MediaQuery.of(context).size.width * .8, MediaQuery.of(context).size.height * .065),
+        onSurface: onTapColor,
+      ),
+    );
+  }
+  /*
+    FlatButton(
       onPressed: () => onPressed(),
       //icon: Icon(icon),
       child: Text(
@@ -42,7 +78,7 @@ class Button extends StatelessWidget {
       height: MediaQuery.of(context).size.height * .065,
       splashColor: onTapColor,
     );
-  }
+   */
 }
 
 class CustomIconButton extends StatelessWidget {
@@ -59,19 +95,17 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      padding: EdgeInsets.all(0.05),
+    return TextButton(
       onPressed: () => onPressed(),
       child: Icon(
         icons,
         color: iconColor,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-        
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
+        onSurface: onTapColor,
+        padding: EdgeInsets.all(0.05),
       ),
-      
-      splashColor: onTapColor,
     );
   }
 }
@@ -94,7 +128,7 @@ class ADButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: () => onPressed(),
       //icon: Icon(icon),
       child: Text(
@@ -106,16 +140,15 @@ class ADButton extends StatelessWidget {
         ),
         textAlign: TextAlign.center,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),
         side: BorderSide(
           color: borderColor,
           width: 2,
         ),
       ),
-      minWidth: MediaQuery.of(context).size.width * .15,
-      height: MediaQuery.of(context).size.height * .04,
-      splashColor: onTapColor,
+      minimumSize: Size(MediaQuery.of(context).size.width * .15, MediaQuery.of(context).size.height * .04),
+      ),
     );
   }
 }

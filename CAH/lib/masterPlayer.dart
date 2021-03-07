@@ -1,12 +1,12 @@
 
-import 'package:CAH/button.dart';
-import 'package:CAH/custom_AlertDialog.dart';
-import 'package:CAH/main.dart';
-import 'package:CAH/player.dart';
-import 'package:CAH/readAnswers.dart';
 import 'package:flutter/material.dart';
 
-import 'package:CAH/server.dart';
+import 'button.dart';
+import 'custom_AlertDialog.dart';
+import 'main.dart';
+import 'player.dart';
+import 'readAnswers.dart';
+import 'server.dart';
 
 class MasterPlayer extends StatefulWidget {
   // Parameter required

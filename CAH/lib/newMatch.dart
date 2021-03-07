@@ -1,12 +1,12 @@
 import 'dart:math';
-import 'package:CAH/custom_AlertDialog.dart';
-import 'package:CAH/masterPlayer.dart';
-import 'package:CAH/player.dart';
 import 'package:flutter/material.dart';
 
-import 'package:CAH/server.dart';
-import 'Button.dart';
-import 'package:CAH/textBox.dart';
+import 'button.dart';
+import 'custom_AlertDialog.dart';
+import 'masterPlayer.dart';
+import 'player.dart';
+import 'server.dart';
+import 'textBox.dart';
 
 class NewMatch extends StatefulWidget{
   @override
@@ -120,70 +120,70 @@ class _NewMatchState extends State<NewMatch>{
                       label: 'Match ID',
                       wid: ListTile(
                         title: Text(
-                        newID.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0
+                          newID.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
                         ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.05,
+                    ),
+                    // Name text field
+                    TextBox(
+                      label: 'Name',
+                      wid: TextField(
+                        controller: _nameInput,
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(
+                          hintText: 'Enter your name',
+                          focusColor: Colors.black,
+                          hoverColor: Colors.black,
+                          border: InputBorder.none,
+                          //errorText: _validate ? '\u26A0 Name missing!' : null
+                        ),
+                        textAlign: TextAlign.center,
                       )
                     ),  
-                  ),
-
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height*.05,
-                  ),
-                  // Name text field
-                  TextBox(
-                    label: 'Name',
-                    wid: TextField(
-                      controller: _nameInput,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
-                        focusColor: Colors.black,
-                        hoverColor: Colors.black,
-                        border: InputBorder.none,
-                        //errorText: _validate ? '\u26A0 Name missing!' : null
-                      ),
-                      textAlign: TextAlign.center,
-                    )
-                  ),  
-                  
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height*.05,
-                  ),
-                  //to create new game
-                  Button(
-                    text: 'Start', 
-                    textColor: Colors.black,
-                    borderColor: Colors.black,
-                    onTapColor: Colors.black54,
-                    onPressed: () async{
-                      // if name text field is not empty
-                      if (_nameInput.text.toString().isNotEmpty) {
-                        //create new match and add this FIRST player
-                        Player player = await server.addPlayer(newID.toString(), _nameInput.text.toString(), true);
-                        // set this bool var 'false' on FireBase
-                        await server.initMatchGame(newID.toString());
-                        // with delay go to Master Player page
-                        Future.delayed(Duration(milliseconds: 300), (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true, player: player, )));
-                        });
-                      }
-                      //else, if is empty
-                      else {
-                        // display custom AD
-                        return showDialog(
-                          context: context,
-                          builder: (context) {
-                            return WindowDialog(text: 'Name missing!',);
-                          },
-                        );
-                      }
-                    },
-                  ),
+                    
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.05,
+                    ),
+                    //to create new game
+                    Button(
+                      text: 'Start', 
+                      textColor: Colors.black,
+                      borderColor: Colors.black,
+                      onTapColor: Colors.black54,
+                      onPressed: () async{
+                        // if name text field is not empty
+                        if (_nameInput.text.toString().isNotEmpty) {
+                          //create new match and add this FIRST player
+                          Player player = await server.addPlayer(newID.toString(), _nameInput.text.toString(), true);
+                          // set this bool var 'false' on FireBase
+                          await server.initMatchGame(newID.toString());
+                          // with delay go to Master Player page
+                          Future.delayed(Duration(milliseconds: 300), (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MasterPlayer(matchID: newID.toString(), isFirst: true, player: player, )));
+                          });
+                        }
+                        //else, if is empty
+                        else {
+                          // display custom AD
+                          return showDialog(
+                            context: context,
+                            builder: (context) {
+                              return WindowDialog(text: 'Name missing!',);
+                            },
+                          );
+                        }
+                      },
+                    ),
                 ],
               ),
             ), 
