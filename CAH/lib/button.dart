@@ -30,8 +30,9 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return FlatButton(
       onPressed: () => onPressed(),
+      //icon: Icon(icon),
       child: Text(
         text.toUpperCase(),
         style: TextStyle(
@@ -41,17 +42,16 @@ class Button extends StatelessWidget {
         ),
         textAlign: TextAlign.center,
       ),
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          side: BorderSide(
-            color: Colors.black,
-            width: 2,
-          ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+        side: BorderSide(
+          color: borderColor,
+          width: 2,
         ),
-        minimumSize: Size(MediaQuery.of(context).size.width * .8, MediaQuery.of(context).size.height * .065),
-        onSurface: onTapColor,
       ),
+      minWidth: MediaQuery.of(context).size.width * .8,
+      height: MediaQuery.of(context).size.height * .065,
+      splashColor: onTapColor,
     );
   }
   /*
@@ -128,7 +128,7 @@ class ADButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return FlatButton(
       onPressed: () => onPressed(),
       //icon: Icon(icon),
       child: Text(
@@ -140,15 +140,16 @@ class ADButton extends StatelessWidget {
         ),
         textAlign: TextAlign.center,
       ),
-      style: TextButton.styleFrom(
+      
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),
         side: BorderSide(
           color: borderColor,
           width: 2,
         ),
       ),
-      minimumSize: Size(MediaQuery.of(context).size.width * .15, MediaQuery.of(context).size.height * .04),
-      ),
+      minWidth: MediaQuery.of(context).size.width * .15,
+      height: MediaQuery.of(context).size.height * .04,
+      splashColor: onTapColor,
     );
   }
 }

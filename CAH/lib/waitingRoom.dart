@@ -56,7 +56,7 @@ class _WaitingRoomState extends State<WaitingRoom> {
             future: boh(),
             builder: (context, snapshot) {
               if (snapshot.hasData && winState) {
-                if (masterState) {
+                if (masterState) {      //è qui il problema
                   initSentAnswers();
                   Future.delayed(Duration(seconds: 3), () {
                     Navigator.push(
